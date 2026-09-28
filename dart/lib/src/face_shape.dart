@@ -10,7 +10,7 @@ export 'package:critalarm_face/src/face_rig.dart';
 ///
 /// The parts themselves, and how they blend, live in `face_rig.dart`. This
 /// file is only the poses: where the eyes sit, how the mouth curves, which
-/// brows show. Every face in the app comes from here, so two of them can
+/// brows show. Every face in the package comes from here, so two of them can
 /// always be mixed.
 
 /// The face [state] rests at.
@@ -59,8 +59,8 @@ const Color mouthCoral = Color(0xFFFA7970);
 /// Builds a mouth out of a lower lip and an upper lip, both traced left to
 /// right.
 ///
-/// This is the shape of every mouth in the app, and it is what lets a smile
-/// turn into a yawn. The points run all the way around: the left corner,
+/// This is the shape of every mouth in the package, and it is what lets a
+/// smile turn into a yawn. The points run all the way around: the left corner,
 /// along the lower lip, the right corner, then back along the upper lip. A
 /// closed mouth gives the same curve for both lips, so the two sit on each
 /// other and the mouth reads as shut. Opening it is then the upper lip
