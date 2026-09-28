@@ -38,6 +38,12 @@ async function run(seed: number, hour: number, wakeOnce: boolean): Promise<Entry
 }
 
 describe("idle.json", () => {
+  // An empty or renamed fixture must fail, not pass with no cases.
+  it("has every run", () => {
+    expect(fixture.runs.length).toBe(3);
+    for (const r of fixture.runs) expect(r.events.length).toBeGreaterThan(0);
+  });
+
   it.each(fixture.runs.map((r) => [`seed ${r.seed}, hour ${r.hour}`, r] as const))(
     "controller: %s",
     async (_, r) => {

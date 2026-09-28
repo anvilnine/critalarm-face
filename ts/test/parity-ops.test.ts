@@ -7,6 +7,7 @@ import {
   buildFaceOps,
   buildRingingOps,
   faceFor,
+  faceOps,
   lerpFace,
   lerpRingingFrame,
   ringingFrameFor,
@@ -16,6 +17,7 @@ import {
   type RingingColors,
   type RingingStyleName,
 } from "../src/index.js";
+import { spec } from "../src/data.js";
 import { firstDifference, readSpec } from "./helpers.js";
 
 interface FaceCase {
@@ -39,9 +41,80 @@ const fixture = readSpec<{
   ringing: RingingCase[];
 }>("fixtures/ops.json");
 
+/**
+ * Splits `faceOps` output into the moves it makes round the face and the
+ * face itself: `[save, ...moves, ...face, restore]`. The face starts with
+ * its own save, so the moves are the translates and rotates before it.
+ */
+function unwrap(ops: FaceOp[]): { moves: FaceOp[]; face: FaceOp[] } {
+  expect(ops[0]).toEqual({ op: "save" });
+  expect(ops.at(-1)).toEqual({ op: "restore" });
+  const inner = ops.slice(1, -1);
+  let n = 0;
+  while (inner[n]?.op === "translate" || inner[n]?.op === "rotate") n++;
+  return { moves: inner.slice(0, n), face: inner.slice(n) };
+}
+
+const byName = new Map(fixture.faces.map((c) => [c.name, c] as const));
+const states = spec.states.map((s) => s.name as FaceState);
+
 describe("ops.json", () => {
   it("is schema version 1", () => {
     expect(fixture.schemaVersion).toBe(1);
+  });
+
+  // An empty or renamed fixture must fail, not pass with no cases.
+  it("has every case", () => {
+    expect(states.length).toBe(36);
+    expect(fixture.faces.length).toBe(2 * states.length + 3);
+    expect(fixture.blends.length).toBe(60);
+    expect(fixture.ringing.length).toBe(80);
+    for (const theme of ["light", "dark"]) {
+      for (const s of states) expect(byName.has(`${theme}/${s}`)).toBe(true);
+    }
+  });
+
+  // The same faces again, built the way a host builds them: a state name and
+  // a palette, so the palette to colour code (outline per state, ink,
+  // tongue, dark) is checked too.
+  describe("faceOps", () => {
+    const cases = (["light", "dark"] as const).flatMap((theme) =>
+      states.map((s) => [`${theme}/${s}`, theme, s] as const),
+    );
+
+    it.each(cases)("%s", (name, palette, state) => {
+      const { moves, face } = unwrap(faceOps(state, { palette }));
+      const tilt = spec.states.find((s) => s.name === state)?.defaultTilt ?? 0;
+      if (tilt === 0) {
+        expect(moves).toEqual([]);
+      } else {
+        expect(firstDifference(moves, [
+          { op: "translate", dx: 100, dy: 100 },
+          { op: "rotate", radians: tilt },
+          { op: "translate", dx: -100, dy: -100 },
+        ])).toBeNull();
+      }
+      expect(firstDifference(face, byName.get(name)?.ops)).toBeNull();
+    });
+
+    it("light/laughing-blue-tongue", () => {
+      const { face } = unwrap(faceOps("laughing", { tongue: "#4EAAD8" }));
+      expect(firstDifference(face, byName.get("light/laughing-blue-tongue")?.ops)).toBeNull();
+    });
+
+    // Live motion, at points where the Dart fixture pins the pose.
+    it("light/watching-look", () => {
+      const elapsedMs = 0.7 * spec.motion.durationsMs.watchingLook;
+      const { moves, face } = unwrap(faceOps("watching", { elapsedMs }));
+      expect(moves).toEqual([]);
+      expect(firstDifference(face, byName.get("light/watching-look")?.ops)).toBeNull();
+    });
+
+    it("light/dizzy-spin", () => {
+      const elapsedMs = (1.3 / (2 * Math.PI)) * spec.motion.durationsMs.dizzySpin;
+      const { face } = unwrap(faceOps("dizzy", { elapsedMs }));
+      expect(firstDifference(face, byName.get("light/dizzy-spin")?.ops)).toBeNull();
+    });
   });
 
   describe("faces", () => {
