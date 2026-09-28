@@ -19,7 +19,11 @@
     "animation",
     "svg",
     "canvas",
-    "face"
+    "face",
+    "crit-alarm",
+    "emoji",
+    "avatar",
+    "alarm"
   ],
   "type": "module",
   "engines": {
@@ -38,7 +42,8 @@
   "files": [
     "dist",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "NOTICE"
   ],
   "scripts": {
     "spec": "node scripts/copy-spec.mjs",
@@ -50,6 +55,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "contact-sheet": "npm run build && node scripts/contact-sheet.mjs",
+    "readme-image": "npm run build && node scripts/readme-image.mjs",
     "example": "npm run build && node examples/browser/serve.mjs",
     "prepublishOnly": "npm run build"
   },
