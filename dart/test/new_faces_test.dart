@@ -114,5 +114,40 @@ void main() {
       expect(find.byType(FaceWidget), findsOneWidget);
       expect(find.byType(Transform), findsWidgets);
     });
+
+    Widget liveAlarmed({bool reduceMotion = false, FaceShape? shape}) =>
+        MaterialApp(
+          home: MediaQuery(
+            data: MediaQueryData(disableAnimations: reduceMotion),
+            child: FaceWidget(
+              state: FaceState.alarmed,
+              isLive: true,
+              shape: shape,
+            ),
+          ),
+        );
+
+    testWidgets('a live face keeps asking for frames', (tester) async {
+      await tester.pumpWidget(liveAlarmed());
+      await tester.pump(const Duration(milliseconds: 16));
+      expect(tester.binding.hasScheduledFrame, isTrue);
+    });
+
+    testWidgets('reduce motion runs no animation', (tester) async {
+      await tester.pumpWidget(liveAlarmed(reduceMotion: true));
+      await tester.pump(const Duration(milliseconds: 16));
+      expect(tester.binding.hasScheduledFrame, isFalse);
+
+      // Turning it off starts the motion again.
+      await tester.pumpWidget(liveAlarmed());
+      await tester.pump(const Duration(milliseconds: 16));
+      expect(tester.binding.hasScheduledFrame, isTrue);
+    });
+
+    testWidgets('a given shape runs no animation', (tester) async {
+      await tester.pumpWidget(liveAlarmed(shape: faceFor(FaceState.calm)));
+      await tester.pump(const Duration(milliseconds: 16));
+      expect(tester.binding.hasScheduledFrame, isFalse);
+    });
   });
 }

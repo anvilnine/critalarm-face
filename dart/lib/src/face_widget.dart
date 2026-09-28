@@ -78,16 +78,27 @@ class _FaceWidgetState extends State<FaceWidget> with TickerProviderStateMixin {
   AnimationController? _bounceController;
   AnimationController? _tiltSwayController;
 
+  /// The system "reduce motion" setting, as last read. Null before the
+  /// first read.
+  bool? _reduceMotion;
+
   @override
-  void initState() {
-    super.initState();
-    _updateControllers();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final reduceMotion =
+        MediaQuery.maybeOf(context)?.disableAnimations ?? false;
+    if (reduceMotion != _reduceMotion) {
+      _reduceMotion = reduceMotion;
+      _updateControllers();
+    }
   }
 
   @override
   void didUpdateWidget(covariant FaceWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.state != widget.state || oldWidget.isLive != widget.isLive) {
+    if (oldWidget.state != widget.state ||
+        oldWidget.isLive != widget.isLive ||
+        (oldWidget.shape == null) != (widget.shape == null)) {
       _updateControllers();
     }
   }
@@ -113,7 +124,10 @@ class _FaceWidgetState extends State<FaceWidget> with TickerProviderStateMixin {
 
   void _updateControllers() {
     _disposeControllers();
-    if (!widget.isLive) return;
+    // A still face needs no clock. build() draws it without the controllers.
+    if (!widget.isLive || widget.shape != null || _reduceMotion == true) {
+      return;
+    }
 
     switch (widget.state) {
       case FaceState.alarmed:
