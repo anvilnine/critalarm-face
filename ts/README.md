@@ -4,15 +4,26 @@ Crit, the [Crit Alarm](https://critalarm.app) mascot, for the web and Node. 36 f
 into each other, an idle loop, and 18 ringing animations, drawn to SVG or a 2D canvas. No runtime
 dependencies. ESM only, Node 22 or later, and any current browser.
 
-It is a port of the Dart package in this repo. Both build the same list of draw ops for the same
+This is one of two packages in the [critalarm-face](https://github.com/anvilnine/critalarm-face)
+repo. The root README covers both. This one is a port of the Dart package there. Both build the same list of draw ops for the same
 face, and the tests check every case in `spec/fixtures` against the Dart output, so Crit looks the
 same in the app, on the web and in a video.
 
 ## Install
 
+Not published to npm yet. Build it from the repo and install the tarball:
+
 ```sh
-npm install @anvilnine/critalarm-face
+git clone https://github.com/anvilnine/critalarm-face.git
+cd critalarm-face/ts
+npm ci
+npm run build
+npm pack
+# In your project:
+npm install /path/to/critalarm-face/ts/anvilnine-critalarm-face-0.1.0.tgz
 ```
+
+Once it is on npm, this becomes `npm install @anvilnine/critalarm-face`.
 
 ## Usage
 
@@ -54,7 +65,8 @@ All three `mount` functions hold still when the system asks for reduced motion.
 - `ringingFrameFor(style, t)`, `lerpFace`, `lerpRingingFrame`, `idleTimeline` and
   `IdleFaceTracker` give frames on a clock you control, for video.
 
-`spec/SPEC.md` in the repo explains every field and op.
+[`spec/SPEC.md`](https://github.com/anvilnine/critalarm-face/blob/main/spec/SPEC.md) explains every
+field and op.
 
 ## Examples
 
@@ -75,10 +87,14 @@ npm test          # parity with the Dart fixtures, plus SVG and canvas checks
 npm run typecheck
 npm run build
 npm run contact-sheet -- --out /tmp/crit-sheets --dart /tmp/dart-sheets
+npm run readme-image  # redraws ../docs/images/faces.png
 ```
 
 `spec/faces.json` is copied into `src/generated/` before each of these. Never edit the copy.
 
-## Licence
+See [CONTRIBUTING.md](https://github.com/anvilnine/critalarm-face/blob/main/CONTRIBUTING.md)
+for the full flow when a face changes.
+
+## License
 
 Apache-2.0.
