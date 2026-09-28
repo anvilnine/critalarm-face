@@ -10,6 +10,7 @@
 //   --padding F    Room round each face for props, as a fraction. Default 0.15.
 //   --background C A CSS colour behind the face. Default transparent.
 //   --out DIR      Where to write. Default examples/node-export/out.
+//   --help         Print the flags and stop.
 //
 // SVG needs nothing but this package. PNG uses @resvg/resvg-js, a dev
 // dependency of the package here; install it in your own project to do the
@@ -23,15 +24,38 @@ import { Resvg } from "@resvg/resvg-js";
 import { faceStates, renderFaceSvg, renderRingingSvg, ringingStyles } from "../../dist/index.js";
 
 const here = dirname(fileURLToPath(import.meta.url));
-const { values } = parseArgs({
-  options: {
-    size: { type: "string", default: "512" },
-    palette: { type: "string", default: "light" },
-    padding: { type: "string", default: "0.15" },
-    background: { type: "string" },
-    out: { type: "string", default: join(here, "out") },
-  },
-});
+const usage = `Usage: node examples/node-export/export.mjs [flags]
+
+Exports every face, and every ringing style's still point, to SVG and PNG.
+
+Flags (all optional):
+  --size N       PNG width and height in pixels. Default 512.
+  --palette P    light or dark. Default light.
+  --padding F    Room round each face for props, as a fraction. Default 0.15.
+  --background C A CSS colour behind the face. Default transparent.
+  --out DIR      Where to write. Default examples/node-export/out.
+  --help         Print this and stop.
+`;
+let values;
+try {
+  ({ values } = parseArgs({
+    options: {
+      size: { type: "string", default: "512" },
+      palette: { type: "string", default: "light" },
+      padding: { type: "string", default: "0.15" },
+      background: { type: "string" },
+      out: { type: "string", default: join(here, "out") },
+      help: { type: "boolean", short: "h" },
+    },
+  }));
+} catch (error) {
+  process.stderr.write(`${error.message}\n\n${usage}`);
+  process.exit(1);
+}
+if (values.help) {
+  process.stdout.write(usage);
+  process.exit(0);
+}
 
 const size = Number(values.size);
 const palette = values.palette === "dark" ? "dark" : "light";
