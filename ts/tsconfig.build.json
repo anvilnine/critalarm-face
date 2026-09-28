@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    // Maps would point at src/, which does not ship.
+    "sourceMap": false,
+    "declarationMap": false,
+    // The package runs in browsers as well as Node, so the source may not
+    // lean on Node types.
+    "types": []
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist", "test"]
+}

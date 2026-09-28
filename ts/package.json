@@ -1,0 +1,65 @@
+{
+  "name": "@anvilnine/critalarm-face",
+  "version": "0.1.0",
+  "description": "Crit, the Crit Alarm mascot, for the web and Node. 36 faces that blend into each other, an idle loop and 18 ringing animations, drawn to SVG or canvas.",
+  "license": "Apache-2.0",
+  "author": "Anvil Nine",
+  "homepage": "https://critalarm.app",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anvilnine/critalarm-face.git",
+    "directory": "ts"
+  },
+  "bugs": {
+    "url": "https://github.com/anvilnine/critalarm-face/issues"
+  },
+  "keywords": [
+    "critalarm",
+    "mascot",
+    "animation",
+    "svg",
+    "canvas",
+    "face"
+  ],
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "spec": "node scripts/copy-spec.mjs",
+    "prebuild": "npm run spec",
+    "build": "rm -rf dist && tsc -p tsconfig.build.json",
+    "pretypecheck": "npm run spec",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "pretest": "npm run spec",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "contact-sheet": "npm run build && node scripts/contact-sheet.mjs",
+    "example": "npm run build && node examples/browser/serve.mjs",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
+    "@types/node": "^22",
+    "typescript": "^5",
+    "vitest": "^4.1.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
