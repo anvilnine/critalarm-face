@@ -1,0 +1,26 @@
+name: critalarm_face
+description: >-
+  Crit, the Crit Alarm mascot, as a Flutter package. 36 expressions that blend
+  into each other, an idle loop, 18 ringing animations, and a draw op list
+  that other renderers can replay.
+version: 0.1.0
+homepage: https://critalarm.app
+repository: https://github.com/anvilnine/critalarm-face
+issue_tracker: https://github.com/anvilnine/critalarm-face/issues
+topics:
+  - animation
+  - mascot
+  - custom-painter
+
+environment:
+  sdk: ^3.12.0
+  flutter: ">=3.44.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  very_good_analysis: ^10.3.0

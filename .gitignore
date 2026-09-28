@@ -1,0 +1,15 @@
+.DS_Store
+.fvm/
+.dart_tool/
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+pubspec_overrides.yaml
+*.iml
+.idea/
+.vscode/
+node_modules/
+
+# Lock files are not kept for a package.
+dart/pubspec.lock
+dart/example/pubspec.lock
