@@ -13,3 +13,6 @@ node_modules/
 # Lock files are not kept for a package.
 dart/pubspec.lock
 dart/example/pubspec.lock
+
+# npm pack output.
+*.tgz
