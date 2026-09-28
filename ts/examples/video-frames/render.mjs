@@ -12,6 +12,7 @@
 //   --palette P    light or dark. Default light.
 //   --background C A CSS colour behind the face. Default transparent.
 //   --out DIR      Where to write. Default examples/video-frames/out.
+//   --help         Print the flags and stop.
 //
 // It prints the ffmpeg command that turns the frames into a WebM.
 
@@ -32,15 +33,38 @@ import {
 } from "../../dist/index.js";
 
 const here = dirname(fileURLToPath(import.meta.url));
-const { values } = parseArgs({
-  options: {
-    fps: { type: "string", default: "60" },
-    size: { type: "string", default: "720" },
-    palette: { type: "string", default: "light" },
-    background: { type: "string" },
-    out: { type: "string", default: join(here, "out") },
-  },
-});
+const usage = `Usage: node examples/video-frames/render.mjs [flags]
+
+Renders Crit going from calm to alarmed to acked as numbered PNGs.
+
+Flags (all optional):
+  --fps N        Frames per second. Default 60.
+  --size N       Width and height in pixels. Default 720.
+  --palette P    light or dark. Default light.
+  --background C A CSS colour behind the face. Default transparent.
+  --out DIR      Where to write. Default examples/video-frames/out.
+  --help         Print this and stop.
+`;
+let values;
+try {
+  ({ values } = parseArgs({
+    options: {
+      fps: { type: "string", default: "60" },
+      size: { type: "string", default: "720" },
+      palette: { type: "string", default: "light" },
+      background: { type: "string" },
+      out: { type: "string", default: join(here, "out") },
+      help: { type: "boolean", short: "h" },
+    },
+  }));
+} catch (error) {
+  process.stderr.write(`${error.message}\n\n${usage}`);
+  process.exit(1);
+}
+if (values.help) {
+  process.stdout.write(usage);
+  process.exit(0);
+}
 
 const fps = Number(values.fps);
 const size = Number(values.size);
