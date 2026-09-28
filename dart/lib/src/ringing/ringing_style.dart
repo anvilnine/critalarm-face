@@ -60,7 +60,7 @@ enum RingingStyle {
 
 /// Names, notes and timing for [RingingStyle].
 extension RingingStylePresentation on RingingStyle {
-  /// What the style is called in the developer screens.
+  /// A short display name for the style.
   String get label => switch (this) {
     RingingStyle.classic => 'Classic ring',
     RingingStyle.panic => 'Panic',

@@ -4,8 +4,8 @@ import 'dart:ui' show Color, Offset, lerpDouble;
 /// another.
 ///
 /// Every value here is a plain number, a point or a colour, so any two faces
-/// can be mixed part by part. That is what lets the refresh face melt from
-/// calm into working, and what lets the idle loop blink without cutting.
+/// can be mixed part by part. That is what lets a face melt from calm into
+/// working, and what lets the idle loop blink without cutting.
 ///
 /// All coordinates are in the painter's 200 unit box. The head fills
 /// 12..188 on both axes, so its middle is (100, 100).
