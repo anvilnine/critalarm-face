@@ -11,6 +11,7 @@ topics:
   - animation
   - mascot
   - custom-painter
+  - emoji
 
 environment:
   sdk: ^3.12.0
