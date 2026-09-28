@@ -1,0 +1,85 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  dart:
+    name: Dart package and example
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          flutter-version: 3.44.9
+          channel: stable
+          cache: true
+
+      - name: Get packages
+        run: |
+          flutter pub get
+          (cd example && flutter pub get)
+        working-directory: dart
+
+      - name: Analyze the package
+        run: flutter analyze
+        working-directory: dart
+
+      # Includes test/spec_up_to_date_test.dart, which fails when spec/ is stale.
+      - name: Test the package and check spec/ is up to date
+        run: flutter test
+        working-directory: dart
+
+      - name: Analyze the example
+        run: flutter analyze
+        working-directory: dart/example
+
+      - name: Test the example
+        run: flutter test
+        working-directory: dart/example
+
+  ts:
+    name: TypeScript package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: ts/package-lock.json
+
+      - name: Install
+        run: npm ci
+        working-directory: ts
+
+      - name: Typecheck
+        run: npm run typecheck
+        working-directory: ts
+
+      - name: Test
+        run: npm test
+        working-directory: ts
+
+      - name: Build
+        run: npm run build
+        working-directory: ts
+
+      - name: Check the package contents
+        run: npm pack --dry-run
+        working-directory: ts

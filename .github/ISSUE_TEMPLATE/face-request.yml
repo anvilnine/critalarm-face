@@ -1,0 +1,31 @@
+name: Face request
+description: Ask for a new face state or ringing style.
+labels: [face request]
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind
+      options:
+        - Face state
+        - Ringing style
+    validations:
+      required: true
+  - type: input
+    id: name
+    attributes:
+      label: Name
+      placeholder: grumpy
+    validations:
+      required: true
+  - type: textarea
+    id: look
+    attributes:
+      label: What it looks like
+      description: Eyes, brows, mouth, any props or motion. A sketch or reference image helps.
+    validations:
+      required: true
+  - type: textarea
+    id: use
+    attributes:
+      label: Where you would use it

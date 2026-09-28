@@ -1,0 +1,18 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+
+  - package-ecosystem: npm
+    directory: /ts
+    schedule:
+      interval: monthly
+
+  - package-ecosystem: pub
+    directories:
+      - /dart
+      - /dart/example
+    schedule:
+      interval: monthly

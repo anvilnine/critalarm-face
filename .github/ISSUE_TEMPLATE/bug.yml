@@ -1,0 +1,39 @@
+name: Bug report
+description: Something draws, moves or builds wrong.
+labels: [bug]
+body:
+  - type: dropdown
+    id: package
+    attributes:
+      label: Package
+      options:
+        - Flutter (critalarm_face)
+        - TypeScript (@anvilnine/critalarm-face)
+        - Both
+        - Spec or docs
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit
+      placeholder: v0.1.0
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what you got. Screenshots help for anything visual.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Code to reproduce
+      render: text
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      placeholder: Flutter 3.44.9 on iOS 26, or Node 22 / Chrome 140
