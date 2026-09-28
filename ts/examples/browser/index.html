@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Crit face examples</title>
+    <link rel="icon" href="data:," />
+    <style>
+      :root {
+        --bg: #f7f2e9;
+        --panel: #fffaf2;
+        --text: #1a140f;
+        --muted: #6b5f55;
+        --line: #e6dccd;
+        --accent: #f5473a;
+        color-scheme: light;
+      }
+      body.dark {
+        --bg: #16120f;
+        --panel: #201a16;
+        --text: #f7f1ea;
+        --muted: #b3a79b;
+        --line: #3a312a;
+        color-scheme: dark;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+      }
+      header,
+      section {
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 24px 16px;
+      }
+      header {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      h1 {
+        font-size: 24px;
+        margin: 0;
+      }
+      h2 {
+        font-size: 18px;
+        margin: 0 0 4px;
+      }
+      p {
+        margin: 0 0 16px;
+        color: var(--muted);
+      }
+      code {
+        font-size: 13px;
+      }
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 20px;
+      }
+      .gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
+        gap: 16px;
+      }
+      .cell {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        color: var(--muted);
+        text-align: center;
+      }
+      .cell svg {
+        display: block;
+      }
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
+        align-items: center;
+      }
+      .controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+      }
+      button,
+      select {
+        font: inherit;
+        color: var(--text);
+        background: var(--bg);
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 6px 12px;
+        cursor: pointer;
+      }
+      button[aria-pressed="true"] {
+        background: var(--text);
+        color: var(--bg);
+      }
+      input[type="range"] {
+        width: min(360px, 100%);
+      }
+      .stage {
+        min-width: 180px;
+        min-height: 180px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div>
+        <h1>Crit face</h1>
+        <p>Every example below comes from <code>@anvilnine/critalarm-face</code>, loaded from <code>dist/</code> with no bundler.</p>
+      </div>
+      <button id="theme" type="button">Dark palette</button>
+    </header>
+
+    <section>
+      <div class="panel">
+        <h2>Live face</h2>
+        <p><code>mountFace</code>. Pick a state: the face blends to it, then plays that state's motion.</p>
+        <div class="row">
+          <div class="stage" id="live"></div>
+          <div class="controls" id="live-states"></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="panel">
+        <h2>Blend two faces</h2>
+        <p><code>blendFaces(a, b, t)</code> and <code>renderFaceSvg</code>.</p>
+        <div class="row">
+          <div class="stage" id="morph"></div>
+          <div>
+            <div class="controls">
+              <select id="morph-from" aria-label="From"></select>
+              <span>to</span>
+              <select id="morph-to" aria-label="To"></select>
+            </div>
+            <p></p>
+            <input id="morph-t" type="range" min="0" max="1" step="0.01" value="0.5" aria-label="Blend" />
+            <div id="morph-value"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="panel">
+        <h2>Idle face</h2>
+        <p><code>mountIdleFace</code>. Calm, with a small expression every few seconds. It nods off after a while; click it to wake it.</p>
+        <div class="row">
+          <div class="stage" id="idle"></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="panel">
+        <h2>Ringing</h2>
+        <p><code>mountRingingFace</code>. Pick a style, or shuffle through them.</p>
+        <div class="row">
+          <div class="stage" id="ringing"></div>
+          <select id="ringing-style" aria-label="Ringing style"></select>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="panel">
+        <h2>All 36 faces</h2>
+        <p><code>renderFaceSvg(state)</code>, inline SVG.</p>
+        <div class="gallery" id="gallery"></div>
+      </div>
+    </section>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

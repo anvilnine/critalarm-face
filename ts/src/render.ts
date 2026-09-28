@@ -28,7 +28,7 @@ export interface SvgOutputOptions {
   readonly background?: string;
   /** Text for screen readers. */
   readonly title?: string;
-  /** Prefix for clip path ids. See {@link SvgOptions.idPrefix}. */
+  /** Prefix for clip path ids. See `SvgOptions.idPrefix`. */
   readonly idPrefix?: string;
 }
 
