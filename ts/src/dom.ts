@@ -9,7 +9,7 @@
  * @module
  */
 
-import { faceFor, ringingStyleInfo, strokeFor } from "./data.js";
+import { faceFor, ringingStyleInfo, spec, strokeFor } from "./data.js";
 import { drawToCanvas } from "./canvas.js";
 import { easeInOut } from "./easing.js";
 import { IdleFaceController, IdleFaceTracker } from "./idle.js";
@@ -20,6 +20,7 @@ import { RINGING_STAGE_UNITS } from "./ringing/ops.js";
 import { RingingShuffle } from "./ringing/shuffle.js";
 import {
   faceOps,
+  livePose,
   resolvePalette,
   ringingOps,
   type FaceOptions,
@@ -91,6 +92,39 @@ function animate(frame: (nowMs: number) => void): { start(): void; stop(): void 
 // mountFace.
 // ---------------------------------------------------------------------------
 
+/** The loops that live motion plays. */
+const MOTION_KEYS = [
+  "alarmedShake",
+  "shockedShake",
+  "watchingLook",
+  "dizzySpin",
+  "laughingBounce",
+  "confusedSway",
+] as const;
+
+/**
+ * The first point, in milliseconds, of `state`'s live motion where the face
+ * sits closest to its still pose (turned by `tilt`, not moved). Starting the
+ * motion there after a blend means the face does not jump.
+ */
+function restingPhaseMs(state: FaceState, tilt: number, tiltOverride?: number): number {
+  const d = spec.motion.durationsMs;
+  // A back and forth loop repeats every two periods.
+  const endMs = 2 * Math.max(...MOTION_KEYS.map((k) => d[k]));
+  let best = 0;
+  let bestOff = Infinity;
+  for (let ms = 0; ms < endMs; ms++) {
+    const p = livePose(state, ms, tilt, tiltOverride);
+    const off = Math.abs(p.rotate - tilt) + Math.abs(p.dx) + Math.abs(p.dy) + Math.abs(p.lookDx);
+    if (off < bestOff - 1e-9) {
+      best = ms;
+      bestOff = off;
+      if (off === 0) break;
+    }
+  }
+  return best;
+}
+
 /** Options for {@link mountFace}. */
 export interface MountFaceOptions
   extends Omit<FaceOptions, "state" | "elapsedMs" | "size"> {
@@ -98,9 +132,15 @@ export interface MountFaceOptions
   readonly state?: FaceState;
   /** Width and height in CSS pixels. Default 120. */
   readonly size?: number;
-  /** False holds the face still. Default true. */
+  /**
+   * False holds the face still. Default true, which differs from the Dart
+   * `FaceWidget`, whose `isLive` defaults to false.
+   */
   readonly live?: boolean;
-  /** How long a change of state takes to blend. Default 450. */
+  /**
+   * How long a change of state takes to blend. Default 450. The Dart
+   * `FaceWidget` does not blend: it switches at once.
+   */
   readonly morphMs?: number;
 }
 
@@ -108,9 +148,9 @@ export interface MountFaceOptions
 export interface MountedFace {
   /** The expression showing, or being blended to. */
   readonly state: FaceState;
-  /** Blends into `state`, then plays its live motion. */
+  /** Blends into `state`, then plays its live motion. Does nothing after `destroy`. */
   setState(state: FaceState): void;
-  /** Stops the animation and removes the face. */
+  /** Stops the animation and removes the face. Safe to call more than once. */
   destroy(): void;
 }
 
@@ -124,6 +164,11 @@ interface Look {
  * Puts a live Crit inside `element`. It plays the state's motion the way the
  * app does (alarmed shakes, watching looks around, dizzy spins and so on),
  * and {@link MountedFace.setState} blends to a new expression.
+ *
+ * Two defaults differ from the Dart `FaceWidget`: the face is live unless
+ * `live` is false (Dart's `isLive` defaults to false), and a change of state
+ * blends over `morphMs` (Dart switches at once). After a blend the new
+ * state's motion starts from its still pose, so the face does not jump.
  *
  * @example
  * ```ts
@@ -174,7 +219,7 @@ export function mountFace(element: HTMLElement, options: MountFaceOptions = {}):
       });
       if (p >= 1) {
         from = null;
-        stateStart = now;
+        stateStart = now - restingPhaseMs(state, to.tilt, options.tilt);
         if (!live) loop.stop();
       }
     } else {
@@ -191,7 +236,9 @@ export function mountFace(element: HTMLElement, options: MountFaceOptions = {}):
   };
 
   const loop = animate(render);
+  let destroyed = false;
   const sync = () => {
+    if (destroyed) return;
     render(performance.now());
     if (live && !reduced()) loop.start();
     else loop.stop();
@@ -204,6 +251,7 @@ export function mountFace(element: HTMLElement, options: MountFaceOptions = {}):
       return state;
     },
     setState(next: FaceState) {
+      if (destroyed) return;
       if (next === state && from === null) return;
       from = current;
       morphStart = performance.now();
@@ -213,6 +261,8 @@ export function mountFace(element: HTMLElement, options: MountFaceOptions = {}):
       if (!reduced()) loop.start();
     },
     destroy() {
+      if (destroyed) return;
+      destroyed = true;
       loop.stop();
       query?.removeEventListener("change", sync);
       stage.remove();
@@ -238,9 +288,9 @@ export interface MountIdleFaceOptions {
 
 /** What {@link mountIdleFace} returns. */
 export interface MountedIdleFace {
-  /** Wakes the face if it has nodded off. Tapping it does the same. */
+  /** Wakes the face if it has nodded off. Tapping it does the same. Does nothing after `destroy`. */
   wake(): void;
-  /** Stops the loop and removes the face. */
+  /** Stops the loop and removes the face. Safe to call more than once. */
   destroy(): void;
 }
 
@@ -269,8 +319,10 @@ export function mountIdleFace(
     stage.draw(faceOps(shape, { palette, size }), 200);
   };
   const loop = animate(render);
+  let destroyed = false;
 
   const sync = () => {
+    if (destroyed) return;
     if (query?.matches === true) {
       controller.stop();
       loop.stop();
@@ -281,7 +333,7 @@ export function mountIdleFace(
     render(performance.now());
   };
   const wake = () => {
-    if (controller.isDozing) void controller.wake();
+    if (!destroyed && controller.isDozing) void controller.wake();
   };
   stage.wrap.addEventListener("click", wake);
   query?.addEventListener("change", sync);
@@ -290,6 +342,8 @@ export function mountIdleFace(
   return {
     wake,
     destroy() {
+      if (destroyed) return;
+      destroyed = true;
       loop.stop();
       controller.dispose();
       query?.removeEventListener("change", sync);
@@ -322,9 +376,9 @@ export interface MountRingingFaceOptions extends RingingOptions {
 
 /** What {@link mountRingingFace} returns. */
 export interface MountedRingingFace {
-  /** Switches to another style, or to `"shuffle"`. */
+  /** Switches to another style, or to `"shuffle"`. Does nothing after `destroy`. */
   setStyle(style: RingingStyleName | "shuffle"): void;
-  /** Stops the animation and removes the face. */
+  /** Stops the animation and removes the face. Safe to call more than once. */
   destroy(): void;
 }
 
@@ -365,7 +419,9 @@ export function mountRingingFace(
     stage.draw(ops, RINGING_STAGE_UNITS);
   };
   const loop = animate(render);
+  let destroyed = false;
   const sync = () => {
+    if (destroyed) return;
     render(performance.now());
     if (moving()) loop.start();
     else loop.stop();
@@ -375,12 +431,15 @@ export function mountRingingFace(
 
   return {
     setStyle(next) {
+      if (destroyed) return;
       style = next;
       start = performance.now();
       shuffle = null;
       render(start);
     },
     destroy() {
+      if (destroyed) return;
+      destroyed = true;
       loop.stop();
       query?.removeEventListener("change", sync);
       stage.remove();

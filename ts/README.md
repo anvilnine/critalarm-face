@@ -46,6 +46,11 @@ const face = mountFace(document.querySelector("#crit")!, { state: "calm", size: 
 face.setState("alarmed");
 ```
 
+Two defaults differ from the Dart `FaceWidget`:
+
+- `mountFace` is live unless you pass `live: false`. Dart's `isLive` defaults to false.
+- `setState` blends to the new face over `morphMs` (450 by default). Dart switches at once.
+
 The idle face and a ringing face:
 
 ```ts
