@@ -1,0 +1,11 @@
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Written from ../spec/faces.json by scripts/copy-spec.mjs before every
+# build, test and typecheck.
+src/generated/
+
+# Example output.
+examples/node-export/out/
+examples/video-frames/out/
