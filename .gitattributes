@@ -1,0 +1,7 @@
+* text=auto eol=lf
+
+*.png binary
+
+# Written by dart/tool/export.dart. Never edit by hand.
+spec/faces.json linguist-generated=true
+spec/fixtures/*.json linguist-generated=true -diff
