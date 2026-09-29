@@ -1,7 +1,13 @@
 * text=auto eol=lf
 
 *.png binary
+*.webp binary
 
 # Written by dart/tool/export.dart. Never edit by hand.
 spec/faces.json linguist-generated=true
 spec/fixtures/*.json linguist-generated=true -diff
+
+# Written by ts/scripts/gallery.mjs. Never edit by hand.
+gallery/**/*.svg linguist-generated=true -diff
+gallery/manifest.json linguist-generated=true
+gallery/README.md linguist-generated=true
