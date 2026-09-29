@@ -47,12 +47,22 @@ compare the draw ops it builds against the fixtures. `spec/SPEC.md` explains eve
 1. Change the Dart code in `dart/lib/`.
 2. From `dart/`, run `fvm flutter test tool/export.dart`. It rewrites `spec/faces.json` and
    `spec/fixtures/`.
-3. Make the same change in `ts/src/`.
-4. Run both suites: `fvm flutter test` in `dart/`, `npm test` in `ts/`.
-5. If you changed what a field or op means, update `spec/SPEC.md`.
-6. If the look changed on purpose, run `npm run readme-image` in `ts/` to redraw
-   `docs/images/faces.png`.
-7. Commit the code and the regenerated `spec/` files together.
+3. Make the same change in `ts/src/`, then run both suites: `fvm flutter test` in `dart/`,
+   `npm test` in `ts/`.
+4. From `ts/`, run `npm run gallery`. It rewrites `gallery/` from the new spec.
+5. Open `gallery/contact-sheet.png` and the new or changed files in `gallery/`, and check they
+   look right.
+6. Commit the code, `spec/` and `gallery/` together.
+
+If you changed what a field or op means, update `spec/SPEC.md` too. `npm test` in `ts/` fails
+while `gallery/` is out of date with `spec/faces.json`.
+
+## The gallery
+
+`gallery/` holds every face and animation as ready-to-use files: SVG and PNG stills, and animated
+WebP loops. `ts/scripts/gallery.mjs` writes all of it. It renders with `@resvg/resvg-js` and
+encodes the WebP files with `sharp`, both dev dependencies, so it needs no system tools on macOS
+or Linux. Never edit the files in `gallery/` by hand, apart from `AGENTS.md` and `CLAUDE.md`.
 
 ## Rules
 

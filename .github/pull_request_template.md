@@ -6,6 +6,7 @@
 
 - [ ] If Dart face code changed, I ran `fvm flutter test tool/export.dart` in `dart/` and committed the `spec/` changes.
 - [ ] I did not edit `spec/faces.json` or `spec/fixtures/` by hand.
+- [ ] Ran `npm run gallery` and committed gallery/.
 - [ ] `fvm flutter analyze` and `fvm flutter test` pass in `dart/` and `dart/example/`.
 - [ ] `npm run typecheck`, `npm test` and `npm run build` pass in `ts/`.
 - [ ] A face change is made in both packages.

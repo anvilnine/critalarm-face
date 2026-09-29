@@ -10,7 +10,7 @@ Both give you 36 faces that blend into each other, an idle face that keeps itsel
 ringing animations. Both turn a face into the same list of draw ops, and the tests check that they
 match.
 
-![All 36 faces](docs/images/faces.png)
+![All 36 faces](gallery/contact-sheet.png)
 
 ## Install
 
@@ -77,6 +77,12 @@ face.setState("alarmed");
 
 More in [`dart/README.md`](dart/README.md) and [`ts/README.md`](ts/README.md).
 
+## Gallery
+
+[`gallery/`](gallery/) has every face and animation as files you can use straight away: each face
+as SVG and as a 512 px PNG in both palettes, and animated WebP loops of the faces that move, every
+ringing style and the idle face. [`gallery/README.md`](gallery/README.md) shows them all.
+
 ## Faces
 
 The 36 face states, by the name both packages use:
@@ -139,7 +145,7 @@ fixtures.
 | `ts/` | The TypeScript package. `src/` is the code, `test/` the parity and renderer tests. |
 | `ts/examples/` | A browser page, an SVG and PNG exporter, and a video frame renderer. |
 | `spec/` | `SPEC.md`, plus `faces.json` and `fixtures/`, generated from the Dart package. |
-| `docs/images/` | The face gallery above, drawn by `ts/scripts/readme-image.mjs`. |
+| `gallery/` | Every face and animation as SVG, PNG and WebP, written by `ts/scripts/gallery.mjs`. |
 
 ## Adding or changing a face
 
@@ -147,9 +153,10 @@ fixtures.
 2. From `dart/`, run `fvm flutter test tool/export.dart` to rewrite `spec/`.
 3. Port the change to `ts/src/`.
 4. Run both test suites: `fvm flutter test` in `dart/`, and `npm test` in `ts/`.
-5. Commit the code and the regenerated `spec/` files together.
+5. From `ts/`, run `npm run gallery` to rewrite `gallery/`, and look over the contact sheet.
+6. Commit the code, `spec/` and `gallery/` together.
 
-Never edit the files in `spec/` by hand, apart from `SPEC.md`. [CONTRIBUTING.md](CONTRIBUTING.md)
+Never edit the files in `spec/` or `gallery/` by hand, apart from `SPEC.md`. [CONTRIBUTING.md](CONTRIBUTING.md)
 has the full setup.
 
 ## Versions
