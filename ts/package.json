@@ -55,13 +55,14 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "contact-sheet": "npm run build && node scripts/contact-sheet.mjs",
-    "readme-image": "npm run build && node scripts/readme-image.mjs",
     "example": "npm run build && node examples/browser/serve.mjs",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "gallery": "npm run build && node scripts/gallery.mjs"
   },
   "devDependencies": {
     "@resvg/resvg-js": "^2.6.2",
     "@types/node": "^22",
+    "sharp": "^0.35.5",
     "typescript": "^5",
     "vitest": "^4.1.2"
   },

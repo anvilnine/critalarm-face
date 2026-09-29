@@ -92,7 +92,7 @@ npm test          # parity with the Dart fixtures, plus SVG and canvas checks
 npm run typecheck
 npm run build
 npm run contact-sheet -- --out /tmp/crit-sheets --dart /tmp/dart-sheets
-npm run readme-image  # redraws ../docs/images/faces.png
+npm run gallery   # rewrites ../gallery/
 ```
 
 `spec/faces.json` is copied into `src/generated/` before each of these. Never edit the copy.
