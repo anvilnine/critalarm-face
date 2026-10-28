@@ -25,7 +25,7 @@ function option(value, label) {
   return o;
 }
 
-// All 36 faces.
+// All 46 faces.
 function drawGallery() {
   const gallery = $("gallery");
   gallery.replaceChildren();

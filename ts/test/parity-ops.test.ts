@@ -65,9 +65,9 @@ describe("ops.json", () => {
 
   // An empty or renamed fixture must fail, not pass with no cases.
   it("has every case", () => {
-    expect(states.length).toBe(36);
+    expect(states.length).toBe(46);
     expect(fixture.faces.length).toBe(2 * states.length + 3);
-    expect(fixture.blends.length).toBe(60);
+    expect(fixture.blends.length).toBe(75);
     expect(fixture.ringing.length).toBe(80);
     for (const theme of ["light", "dark"]) {
       for (const s of states) expect(byName.has(`${theme}/${s}`)).toBe(true);

@@ -160,7 +160,10 @@ otherwise the style's tongue colour (default `mouthCoral`).
 ### Props
 
 `kind` is one of `propKinds`: `popLines`, `zzz`, `puff`, `heart`,
-`motionArcs`. `at` is where it sits, `scale` its size (1 normal), `alpha` 0 to 1.
+`motionArcs`, `sweat`, `tears`, `blush`, `teeth`, `starEyes`, `note`,
+`eyeBags`. `at` is where it sits, `scale` its size (1 normal), `alpha` 0 to 1.
+The props that come in pairs (`tears`, `blush`, `starEyes`, `eyeBags`) draw one
+on each side of `at`; `scale` sizes each one but not the gap between them.
 
 ## Blending two faces
 
@@ -315,6 +318,34 @@ to 11, `Q m[i] mid(m[i], m[i+1])`, then `L m[12]`. With
 - `motionArcs`: for side -1 then 1, for spread 0 then 1:
   `r = (14 + 9 spread) s`; `stroke` the path `A (at.x + 96 side, at.y) r start 0.56 pi`
   with `start = side < 0 ? 0.72 pi : -0.28 pi`, `inkA` at `5 s`.
+- `sweat`: Droplet at `at` (below) in `sweatBlue`.
+- `tears`: for side -1 then 1, Droplet at `at + (30 side, 0)` in `tearBlue`.
+- `blush`: for side -1 then 1, with `c = at + (48 side, 0)`: `fill` the oval at
+  `c`, `rx = 15 s`, `ry = 8 s`, with `withAlpha(blushPink, alpha)`; then one
+  path of three pieces, for `dx` -7, 0, 7: `M c + ((dx - 2.5) s, 4 s)`,
+  `L c + ((dx + 2.5) s, -4 s)`; `stroke` it with `withAlpha(ink, alpha * 0.6)`
+  at `3 s`.
+- `teeth`: one path: `M at + (-21 s, 0)`, `L at + (21 s, 0)`, then for `dx` -9,
+  9: `M at + (dx s, -9 s)`, `L at + (dx s, 9 s)`. `stroke` it with
+  `withAlpha(pupilOnWhite(ink), alpha)` at `4.5 s`, so it stays dark on the
+  white mouth under it.
+- `starEyes`: for side -1 then 1, with `c = at + (30 side, 0)`: ten points,
+  `i` 0..9, radius `17 s` for even `i` and `7.5 s` for odd, angle
+  `-pi/2 + i pi/5`, from `c`: `M` the first, `L` the rest, `Z`. `fill` it with
+  `inkA`, then `stroke` it with `inkA` at `4 s`.
+- `note`: `fill` the oval at `(at.x - 5 s, at.y + 10 s)`, `rx = 7 s`,
+  `ry = 5.5 s`, with `inkA`. Then `stroke` `M at + (1.5 s, 10 s)`,
+  `L at + (1.5 s, -14 s)`, `Q at + (12 s, -11 s) at + (11 s, -1 s)` with `inkA`
+  at `4.5 s`.
+- `eyeBags`: for side -1 then 1, with `c = at + (30 side, 0)`: `stroke`
+  `M c + (-12 s, -2 s)`, `Q c + (0, 8 s) c + (12 s, -2 s)` with
+  `withAlpha(ink, alpha * 0.85)` at `5 s`.
+
+**Droplet** at `p` with `r = 9 s`: `M p + (0, -1.9 r)`,
+`Q p + (1.05 r, -0.4 r) p + (r, 0.4 r)`, `A (p.x, p.y + 0.4 r) r 0 pi`,
+`Q p + (-1.05 r, -0.4 r) p + (0, -1.9 r)`, `Z`. `fill` it with the drop colour
+at `alpha`, `stroke` it with `inkA` at `3 s`, then `fill` the oval at
+`p + (-2.5 s, 3 s)`, radius `2.2 s`, with `withAlpha(white, alpha)`.
 
 ### Cloud outlines
 

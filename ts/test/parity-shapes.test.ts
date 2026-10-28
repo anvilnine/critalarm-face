@@ -32,7 +32,7 @@ const fixture = readSpec<{
 describe("shapes.json", () => {
   // An empty or renamed fixture must fail, not pass with no cases.
   it("has every case", () => {
-    expect(fixture.blends.length).toBe(60);
+    expect(fixture.blends.length).toBe(75);
     expect(Object.keys(fixture.blinking).length).toBe(2);
     expect(fixture.ringing.length).toBe(78);
     expect(fixture.ringingBlends.length).toBe(2);

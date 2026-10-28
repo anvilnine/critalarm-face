@@ -111,6 +111,36 @@ enum FaceState {
 
   /// Soft eyes, warm smile, a heart above the head.
   love,
+
+  /// Just woken by the alarm. One eye half open, the other still shut.
+  groggy,
+
+  /// Flat lids, flat mouth. Not impressed.
+  deadpan,
+
+  /// Eyes shut, a smile, a long breath out and a bead of sweat.
+  relieved,
+
+  /// Wide eyes, small pupils, gritted teeth, a drop of sweat.
+  nervous,
+
+  /// Big wet eyes, a wobbling frown, a tear from each eye.
+  crying,
+
+  /// Brows in a hard V, dot eyes, gritted teeth.
+  angry,
+
+  /// Pink cheeks, eyes looking away, a wavering mouth.
+  embarrassed,
+
+  /// Stars for eyes and a wide open grin.
+  starstruck,
+
+  /// Eyes up and away, lips pursed, a note drifting off.
+  whistling,
+
+  /// Heavy drooping lids, bags under the eyes, head sagging.
+  exhausted,
 }
 
 /// Metadata and presentation helpers for [FaceState].
@@ -153,6 +183,16 @@ extension FaceStatePresentation on FaceState {
     FaceState.cheeky => 'Cheeky',
     FaceState.confident => 'Confident',
     FaceState.love => 'Love',
+    FaceState.groggy => 'Groggy',
+    FaceState.deadpan => 'Deadpan',
+    FaceState.relieved => 'Relieved',
+    FaceState.nervous => 'Nervous',
+    FaceState.crying => 'Crying',
+    FaceState.angry => 'Angry',
+    FaceState.embarrassed => 'Embarrassed',
+    FaceState.starstruck => 'Starstruck',
+    FaceState.whistling => 'Whistling',
+    FaceState.exhausted => 'Exhausted',
   };
 
   /// A short descriptive summary of the expression's features.
@@ -194,6 +234,16 @@ extension FaceStatePresentation on FaceState {
     FaceState.cheeky => 'One eye winked shut, the other open, smirking.',
     FaceState.confident => 'Brows level and low, eyes to one side, smirk.',
     FaceState.love => 'Soft eyes, warm smile, a heart above the head.',
+    FaceState.groggy => 'One eye prised half open, the other still shut.',
+    FaceState.deadpan => 'Half shut eyes under flat lids, a straight mouth.',
+    FaceState.relieved => 'Eyes shut, a smile, a sigh, sweat on the brow.',
+    FaceState.nervous => 'Wide eyes, small pupils, gritted teeth, sweat.',
+    FaceState.crying => 'Big wet eyes, a wobbling frown, tears running.',
+    FaceState.angry => 'Brows in a hard V, dot eyes, gritted teeth.',
+    FaceState.embarrassed => 'Pink cheeks, eyes looking away, wavy mouth.',
+    FaceState.starstruck => 'Stars for eyes, brows up, a wide open grin.',
+    FaceState.whistling => 'Eyes up and away, pursed lips, a music note.',
+    FaceState.exhausted => 'Heavy lids, bags under the eyes, head sagging.',
   };
 
   /// Authentic sample screenshot accent color (e.g. Cyan Blue for laughing,

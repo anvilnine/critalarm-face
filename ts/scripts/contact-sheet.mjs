@@ -7,7 +7,7 @@
 //
 // Writes to --out:
 //
-//   gallery.svg, gallery.png   All 36 faces in light and dark, with labels,
+//   gallery.svg, gallery.png   All 46 faces in light and dark, with labels,
 //                              and every ringing style at t 0, 0.25, 0.5, 0.75
 //                              and its still point.
 //   ts-faces-light.png         The cases the Dart look test draws, laid out

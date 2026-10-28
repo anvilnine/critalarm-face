@@ -546,5 +546,98 @@ function pushProp(ops: FaceOp[], prop: PropShape, style: FaceStyle): void {
         }
       }
       break;
+
+    case "sweat":
+      pushDroplet(ops, at, s, colors.sweatBlue, alpha, ink);
+      break;
+
+    case "tears":
+      // One under each eye. The gap stays the same at any scale.
+      for (const side of [-1, 1]) {
+        pushDroplet(ops, add(at, [side * 30, 0]), s, colors.tearBlue, alpha, ink);
+      }
+      break;
+
+    case "blush":
+      for (const side of [-1, 1]) {
+        const c = add(at, [side * 48, 0]);
+        ops.push(fillOp(oval(c[0], c[1], 15 * s, 8 * s), withAlpha(colors.blushPink, alpha)));
+        const strokes = new PathBuilder();
+        for (const dx of [-7, 0, 7]) {
+          strokes.moveTo(add(c, [(dx - 2.5) * s, 4 * s])).lineTo(add(c, [(dx + 2.5) * s, -4 * s]));
+        }
+        ops.push(strokeOp(strokes.build(), withAlpha(style.ink, alpha * 0.6), 3 * s));
+      }
+      break;
+
+    case "teeth": {
+      const teeth = new PathBuilder().moveTo(add(at, [-21 * s, 0])).lineTo(add(at, [21 * s, 0]));
+      for (const dx of [-9, 9]) {
+        teeth.moveTo(add(at, [dx * s, -9 * s])).lineTo(add(at, [dx * s, 9 * s]));
+      }
+      // Dark even when the ink is light, since the mouth under it is white.
+      ops.push(strokeOp(teeth.build(), withAlpha(pupilOnWhite(style.ink), alpha), 4.5 * s));
+      break;
+    }
+
+    case "starEyes":
+      for (const side of [-1, 1]) {
+        const c = add(at, [side * 30, 0]);
+        const star = new PathBuilder();
+        for (let i = 0; i < 10; i++) {
+          const r = (i % 2 === 0 ? 17 : 7.5) * s;
+          const angle = -Math.PI / 2 + (i * Math.PI) / 5;
+          const p = add(c, [r * Math.cos(angle), r * Math.sin(angle)]);
+          if (i === 0) star.moveTo(p);
+          else star.lineTo(p);
+        }
+        const shape = star.close().build();
+        ops.push(fillOp(shape, ink));
+        ops.push(strokeOp(shape, ink, 4 * s));
+      }
+      break;
+
+    case "note": {
+      ops.push(fillOp(oval(at[0] - 5 * s, at[1] + 10 * s, 7 * s, 5.5 * s), ink));
+      const stem = new PathBuilder()
+        .moveTo(add(at, [1.5 * s, 10 * s]))
+        .lineTo(add(at, [1.5 * s, -14 * s]))
+        .quadTo(add(at, [12 * s, -11 * s]), add(at, [11 * s, -1 * s]));
+      ops.push(strokeOp(stem.build(), ink, 4.5 * s));
+      break;
+    }
+
+    case "eyeBags":
+      for (const side of [-1, 1]) {
+        const c = add(at, [side * 30, 0]);
+        const bag = new PathBuilder()
+          .moveTo(add(c, [-12 * s, -2 * s]))
+          .quadTo(add(c, [0, 8 * s]), add(c, [12 * s, -2 * s]));
+        ops.push(strokeOp(bag.build(), withAlpha(style.ink, alpha * 0.85), 5 * s));
+      }
+      break;
   }
+}
+
+/** A drop with its point up and its round end `9 * s` across: sweat or a tear. */
+function pushDroplet(
+  ops: FaceOp[],
+  at: Point,
+  s: number,
+  colour: Color,
+  alpha: number,
+  ink: Color,
+): void {
+  const r = 9 * s;
+  const tip = add(at, [0, -r * 1.9]);
+  const drop = new PathBuilder()
+    .moveTo(tip)
+    .quadTo(add(at, [r * 1.05, -r * 0.4]), add(at, [r, r * 0.4]))
+    .arc(add(at, [0, r * 0.4]), r, 0, Math.PI)
+    .quadTo(add(at, [-r * 1.05, -r * 0.4]), tip)
+    .close()
+    .build();
+  ops.push(fillOp(drop, withAlpha(colour, alpha)));
+  ops.push(strokeOp(drop, ink, 3 * s));
+  ops.push(fillOp(oval(at[0] - 2.5 * s, at[1] + 3 * s, 2.2 * s, 2.2 * s), withAlpha(colors.white, alpha)));
 }

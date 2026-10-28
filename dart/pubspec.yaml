@@ -1,6 +1,6 @@
 name: critalarm_face
 description: >-
-  Crit, the Crit Alarm mascot, as a Flutter package. 36 expressions that blend
+  Crit, the Crit Alarm mascot, as a Flutter package. 46 expressions that blend
   into each other, an idle loop, 18 ringing animations, and a draw op list
   that other renderers can replay.
 version: 0.1.0

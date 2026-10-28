@@ -1,6 +1,6 @@
 {
   "version": "0.1.0",
-  "specSha256": "37ed798b7214093177cb8c51cedf4866b2c78f3f7b311a44997cc33176a095f0",
+  "specSha256": "085df51c02591203b96a329a2b29119a560fa907593e6151324c377ef700b30c",
   "files": [
     {
       "path": "faces/light/calm.svg",
@@ -579,6 +579,166 @@
       "bytes": 13310
     },
     {
+      "path": "faces/light/groggy.svg",
+      "kind": "still",
+      "state": "groggy",
+      "palette": "light",
+      "format": "svg",
+      "bytes": 2219
+    },
+    {
+      "path": "faces/light/groggy.png",
+      "kind": "still",
+      "state": "groggy",
+      "palette": "light",
+      "format": "png",
+      "bytes": 13281
+    },
+    {
+      "path": "faces/light/deadpan.svg",
+      "kind": "still",
+      "state": "deadpan",
+      "palette": "light",
+      "format": "svg",
+      "bytes": 1794
+    },
+    {
+      "path": "faces/light/deadpan.png",
+      "kind": "still",
+      "state": "deadpan",
+      "palette": "light",
+      "format": "png",
+      "bytes": 13330
+    },
+    {
+      "path": "faces/light/relieved.svg",
+      "kind": "still",
+      "state": "relieved",
+      "palette": "light",
+      "format": "svg",
+      "bytes": 2596
+    },
+    {
+      "path": "faces/light/relieved.png",
+      "kind": "still",
+      "state": "relieved",
+      "palette": "light",
+      "format": "png",
+      "bytes": 16463
+    },
+    {
+      "path": "faces/light/nervous.svg",
+      "kind": "still",
+      "state": "nervous",
+      "palette": "light",
+      "format": "svg",
+      "bytes": 2756
+    },
+    {
+      "path": "faces/light/nervous.png",
+      "kind": "still",
+      "state": "nervous",
+      "palette": "light",
+      "format": "png",
+      "bytes": 18796
+    },
+    {
+      "path": "faces/light/crying.svg",
+      "kind": "still",
+      "state": "crying",
+      "palette": "light",
+      "format": "svg",
+      "bytes": 2762
+    },
+    {
+      "path": "faces/light/crying.png",
+      "kind": "still",
+      "state": "crying",
+      "palette": "light",
+      "format": "png",
+      "bytes": 19018
+    },
+    {
+      "path": "faces/light/angry.svg",
+      "kind": "still",
+      "state": "angry",
+      "palette": "light",
+      "format": "svg",
+      "bytes": 1672
+    },
+    {
+      "path": "faces/light/angry.png",
+      "kind": "still",
+      "state": "angry",
+      "palette": "light",
+      "format": "png",
+      "bytes": 14008
+    },
+    {
+      "path": "faces/light/embarrassed.svg",
+      "kind": "still",
+      "state": "embarrassed",
+      "palette": "light",
+      "format": "svg",
+      "bytes": 2311
+    },
+    {
+      "path": "faces/light/embarrassed.png",
+      "kind": "still",
+      "state": "embarrassed",
+      "palette": "light",
+      "format": "png",
+      "bytes": 17956
+    },
+    {
+      "path": "faces/light/starstruck.svg",
+      "kind": "still",
+      "state": "starstruck",
+      "palette": "light",
+      "format": "svg",
+      "bytes": 2126
+    },
+    {
+      "path": "faces/light/starstruck.png",
+      "kind": "still",
+      "state": "starstruck",
+      "palette": "light",
+      "format": "png",
+      "bytes": 13644
+    },
+    {
+      "path": "faces/light/whistling.svg",
+      "kind": "still",
+      "state": "whistling",
+      "palette": "light",
+      "format": "svg",
+      "bytes": 2425
+    },
+    {
+      "path": "faces/light/whistling.png",
+      "kind": "still",
+      "state": "whistling",
+      "palette": "light",
+      "format": "png",
+      "bytes": 17134
+    },
+    {
+      "path": "faces/light/exhausted.svg",
+      "kind": "still",
+      "state": "exhausted",
+      "palette": "light",
+      "format": "svg",
+      "bytes": 2256
+    },
+    {
+      "path": "faces/light/exhausted.png",
+      "kind": "still",
+      "state": "exhausted",
+      "palette": "light",
+      "format": "png",
+      "bytes": 14954
+    },
+    {
       "path": "faces/dark/calm.svg",
       "kind": "still",
       "state": "calm",
@@ -1155,6 +1315,166 @@
       "bytes": 13282
     },
     {
+      "path": "faces/dark/groggy.svg",
+      "kind": "still",
+      "state": "groggy",
+      "palette": "dark",
+      "format": "svg",
+      "bytes": 2217
+    },
+    {
+      "path": "faces/dark/groggy.png",
+      "kind": "still",
+      "state": "groggy",
+      "palette": "dark",
+      "format": "png",
+      "bytes": 13889
+    },
+    {
+      "path": "faces/dark/deadpan.svg",
+      "kind": "still",
+      "state": "deadpan",
+      "palette": "dark",
+      "format": "svg",
+      "bytes": 1790
+    },
+    {
+      "path": "faces/dark/deadpan.png",
+      "kind": "still",
+      "state": "deadpan",
+      "palette": "dark",
+      "format": "png",
+      "bytes": 13467
+    },
+    {
+      "path": "faces/dark/relieved.svg",
+      "kind": "still",
+      "state": "relieved",
+      "palette": "dark",
+      "format": "svg",
+      "bytes": 2596
+    },
+    {
+      "path": "faces/dark/relieved.png",
+      "kind": "still",
+      "state": "relieved",
+      "palette": "dark",
+      "format": "png",
+      "bytes": 17035
+    },
+    {
+      "path": "faces/dark/nervous.svg",
+      "kind": "still",
+      "state": "nervous",
+      "palette": "dark",
+      "format": "svg",
+      "bytes": 2752
+    },
+    {
+      "path": "faces/dark/nervous.png",
+      "kind": "still",
+      "state": "nervous",
+      "palette": "dark",
+      "format": "png",
+      "bytes": 19682
+    },
+    {
+      "path": "faces/dark/crying.svg",
+      "kind": "still",
+      "state": "crying",
+      "palette": "dark",
+      "format": "svg",
+      "bytes": 2758
+    },
+    {
+      "path": "faces/dark/crying.png",
+      "kind": "still",
+      "state": "crying",
+      "palette": "dark",
+      "format": "png",
+      "bytes": 19429
+    },
+    {
+      "path": "faces/dark/angry.svg",
+      "kind": "still",
+      "state": "angry",
+      "palette": "dark",
+      "format": "svg",
+      "bytes": 1672
+    },
+    {
+      "path": "faces/dark/angry.png",
+      "kind": "still",
+      "state": "angry",
+      "palette": "dark",
+      "format": "png",
+      "bytes": 14674
+    },
+    {
+      "path": "faces/dark/embarrassed.svg",
+      "kind": "still",
+      "state": "embarrassed",
+      "palette": "dark",
+      "format": "svg",
+      "bytes": 2307
+    },
+    {
+      "path": "faces/dark/embarrassed.png",
+      "kind": "still",
+      "state": "embarrassed",
+      "palette": "dark",
+      "format": "png",
+      "bytes": 18550
+    },
+    {
+      "path": "faces/dark/starstruck.svg",
+      "kind": "still",
+      "state": "starstruck",
+      "palette": "dark",
+      "format": "svg",
+      "bytes": 2126
+    },
+    {
+      "path": "faces/dark/starstruck.png",
+      "kind": "still",
+      "state": "starstruck",
+      "palette": "dark",
+      "format": "png",
+      "bytes": 13952
+    },
+    {
+      "path": "faces/dark/whistling.svg",
+      "kind": "still",
+      "state": "whistling",
+      "palette": "dark",
+      "format": "svg",
+      "bytes": 2421
+    },
+    {
+      "path": "faces/dark/whistling.png",
+      "kind": "still",
+      "state": "whistling",
+      "palette": "dark",
+      "format": "png",
+      "bytes": 17533
+    },
+    {
+      "path": "faces/dark/exhausted.svg",
+      "kind": "still",
+      "state": "exhausted",
+      "palette": "dark",
+      "format": "svg",
+      "bytes": 2252
+    },
+    {
+      "path": "faces/dark/exhausted.png",
+      "kind": "still",
+      "state": "exhausted",
+      "palette": "dark",
+      "format": "png",
+      "bytes": 15120
+    },
+    {
       "path": "motion/watching.webp",
       "kind": "motion",
       "state": "watching",
@@ -1409,13 +1729,13 @@
       "kind": "sheet",
       "palette": "light",
       "format": "png",
-      "bytes": 142889
+      "bytes": 187128
     },
     {
       "path": "README.md",
       "kind": "readme",
       "format": "md",
-      "bytes": 16379
+      "bytes": 19985
     }
   ]
 }

@@ -6,11 +6,11 @@ packages drawn from one spec:
 - `dart/`: the Flutter package `critalarm_face`.
 - `ts/`: the npm package `@anvilnine/critalarm-face`, for the web and Node.
 
-Both give you 36 faces that blend into each other, an idle face that keeps itself busy, and 18
+Both give you 46 faces that blend into each other, an idle face that keeps itself busy, and 18
 ringing animations. Both turn a face into the same list of draw ops, and the tests check that they
 match.
 
-![All 36 faces](gallery/contact-sheet.png)
+![All 46 faces](gallery/contact-sheet.png)
 
 ## Install
 
@@ -85,13 +85,14 @@ ringing style and the idle face. [`gallery/README.md`](gallery/README.md) shows 
 
 ## Faces
 
-The 36 face states, by the name both packages use:
+The 46 face states, by the name both packages use:
 
 `calm`, `watching`, `worried`, `alarmed`, `acked`, `working`, `success`, `shocked`, `laughing`,
 `surprised`, `skeptical`, `dizzy`, `determined`, `confused`, `sad`, `blink`, `happy`, `content`,
 `curious`, `lookLeft`, `lookRight`, `thinking`, `interested`, `concerned`, `realization`, `yawn`,
 `sleepy`, `dozing`, `wakesUp`, `shakeHead`, `breatheIn`, `breatheOut`, `proud`, `cheeky`,
-`confident`, `love`.
+`confident`, `love`, `groggy`, `deadpan`, `relieved`, `nervous`, `crying`, `angry`,
+`embarrassed`, `starstruck`, `whistling`, `exhausted`.
 
 ## Ringing styles
 

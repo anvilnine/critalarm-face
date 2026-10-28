@@ -27,6 +27,28 @@ enum PropKind {
 
   /// Curved lines either side of the head, for a shake.
   motionArcs,
+
+  /// A drop of sweat on the brow.
+  sweat,
+
+  /// A tear under each eye, 30 units either side of the prop's middle.
+  tears,
+
+  /// A pink patch with three strokes on each cheek, 48 units either side of
+  /// the prop's middle.
+  blush,
+
+  /// The lines between gritted teeth, laid over a white mouth.
+  teeth,
+
+  /// A star in place of each eye, 30 units either side of the prop's middle.
+  starEyes,
+
+  /// A music note, for a whistle.
+  note,
+
+  /// A tired line under each eye, 30 units either side of the prop's middle.
+  eyeBags,
 }
 
 /// One extra, somewhere near the head.

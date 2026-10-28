@@ -1,6 +1,6 @@
 # critalarm_face
 
-Crit, the [Crit Alarm](https://critalarm.app) mascot, for Flutter. 36 faces that blend into each
+Crit, the [Crit Alarm](https://critalarm.app) mascot, for Flutter. 46 faces that blend into each
 other, an idle face that keeps itself busy, and 18 ringing animations. No dependencies beyond
 Flutter.
 
