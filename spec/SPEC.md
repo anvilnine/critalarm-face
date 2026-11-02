@@ -389,20 +389,32 @@ normal speed) and `stillT` (the point shown when motion is off).
 
 ### Choreography
 
-The frame for each style is a plain function of `t`, in
-`dart/lib/src/ringing/ringing_choreography.dart`. Port it line by line. The
-timing helpers it uses:
+The frame for each style is a plain function of `t`. `ringingFrameFor` is in
+`dart/lib/src/ringing/ringing_choreography.dart`, and each style, plus the
+timing and part helpers they share, has its own file in
+`dart/lib/src/ringing/choreography/` (`classic.dart`, `panic.dart`, `timing.dart`,
+`parts.dart` and so on). Port them line by line. The TypeScript package keeps
+the same names inside `ts/src/ringing/choreography/`. Its entry file is
+`ts/src/ringing/choreography.ts`.
+
+The timing helpers, in `timing.dart` and `timing.ts`:
 
 ```
 frac(x)          = x - floor(x)
 wave(t, n, ph=0) = sin(2 pi (t n + ph))
 pulse(t, n, ph)  = 0.5 + 0.5 wave(t, n, ph)
 seg(t, a, b)     = clamp((t - a) / (b - a), 0, 1)
-ease(x)          = x < 0.5 ? 4x^3 : 1 - (-2x + 2)^3 / 2
 elastic(x)       = x <= 0 ? 0 : x >= 1 ? 1 : 2^(-10x) sin((x - 0.075) 2 pi / 0.3) + 1
 bump(x)          = sin(pi clamp(x, 0, 1))
 snap(v, k=4)     = (e^(2kv) - 1) / (e^(2kv) + 1)
 deg(d)           = d pi / 180
+```
+
+One more helper is shared outside the choreography folder: `easeInOutPoly(x)`
+lives in `dart/lib/src/motion.dart` and `ts/src/easing.ts`.
+
+```
+easeInOutPoly(x) = x < 0.5 ? 4x^3 : 1 - (-2x + 2)^3 / 2
 ```
 
 `ringingFrameFor(style, t)` first takes `frac(t)`. `fixtures/shapes.json`

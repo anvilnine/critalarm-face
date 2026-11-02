@@ -2,6 +2,8 @@
 
 - Ten new faces from the Dart package: `groggy`, `deadpan`, `relieved`, `nervous`, `crying`, `angry`, `embarrassed`, `starstruck`, `whistling` and `exhausted`.
 - Seven new prop kinds to draw them: `sweat`, `tears`, `blush`, `teeth`, `starEyes`, `note` and `eyeBags`.
+- Fixed `mountFace` with `live: false`: the animation loop kept running after a blend ended. A `stop` called from inside a frame now holds.
+- Fixed `mountFace` with `morphMs: 0` hanging the page. A `morphMs` of 0 or below now switches state at once. `cubicBezier` also returns 0 for any input that is not above 0, such as NaN.
 
 ## 0.1.0
 

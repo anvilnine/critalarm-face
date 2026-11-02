@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/animation.dart' show Cubic, Curves;
 
 /// Timings and easing curves the widgets use, in one place.
@@ -39,3 +41,10 @@ abstract final class CritMotion {
   /// `cubic-bezier(0.645, 0.045, 0.355, 1)`.
   static const Cubic easeInOutCubic = Curves.easeInOutCubic;
 }
+
+/// A plain cubic ease in and out: `4x^3` for the first half, then the mirror
+/// of it. The ringing choreography uses it for its one-off moves. It is not
+/// exported from the package; [CritMotion.easeInOutCubic] is the curve for
+/// blends.
+double easeInOutPoly(double x) =>
+    x < 0.5 ? 4 * x * x * x : 1 - math.pow(-2 * x + 2, 3) / 2;
