@@ -22,8 +22,8 @@ describe("faces.json", () => {
     expect(spec).toEqual(faces);
   });
 
-  it("has 36 faces and 18 ringing styles", () => {
-    expect(faceStates).toHaveLength(36);
+  it("has 46 faces and 18 ringing styles", () => {
+    expect(faceStates).toHaveLength(46);
     expect(ringingStyles).toHaveLength(18);
   });
 

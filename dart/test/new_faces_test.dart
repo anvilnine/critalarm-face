@@ -15,7 +15,7 @@ void main() {
       expect(FaceState.values, contains(FaceState.determined));
       expect(FaceState.values, contains(FaceState.confused));
       expect(FaceState.values, contains(FaceState.sad));
-      expect(FaceState.values.length, 36);
+      expect(FaceState.values.length, 46);
     });
 
     test('FaceStatePresentation provides metadata for all states', () {

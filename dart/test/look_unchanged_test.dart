@@ -119,6 +119,9 @@ const List<(FaceState, FaceState)> blendPairs = [
   (FaceState.breatheIn, FaceState.breatheOut),
   (FaceState.happy, FaceState.laughing),
   (FaceState.calm, FaceState.love),
+  (FaceState.calm, FaceState.nervous),
+  (FaceState.calm, FaceState.crying),
+  (FaceState.calm, FaceState.starstruck),
 ];
 
 List<_Case> _ringingCases() {

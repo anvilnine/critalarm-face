@@ -67,7 +67,7 @@ export function strokeFor(palette: Palette, state: FaceState): Color {
   return palette[specData.strokeByState[state]];
 }
 
-/** True when `name` is one of the 36 face states. */
+/** True when `name` is one of the 46 face states. */
 export function isFaceState(name: string): name is FaceState {
   return Object.hasOwn(specData.faces, name);
 }

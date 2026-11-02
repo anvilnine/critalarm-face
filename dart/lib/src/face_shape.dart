@@ -3,6 +3,7 @@ import 'dart:ui' show Color, Offset;
 
 import 'package:critalarm_face/src/face_rig.dart';
 import 'package:critalarm_face/src/face_state.dart';
+import 'package:critalarm_face/src/palette.dart';
 
 export 'package:critalarm_face/src/face_rig.dart';
 
@@ -51,6 +52,16 @@ FaceShape faceFor(FaceState state) => switch (state) {
   FaceState.cheeky => cheekyFace,
   FaceState.confident => confidentFace,
   FaceState.love => loveFace,
+  FaceState.groggy => groggyFace,
+  FaceState.deadpan => deadpanFace,
+  FaceState.relieved => relievedFace,
+  FaceState.nervous => nervousFace,
+  FaceState.crying => cryingFace,
+  FaceState.angry => angryFace,
+  FaceState.embarrassed => embarrassedFace,
+  FaceState.starstruck => starstruckFace,
+  FaceState.whistling => whistlingFace,
+  FaceState.exhausted => exhaustedFace,
 };
 
 /// The coral an open mouth is painted with unless it names another colour.
@@ -866,4 +877,293 @@ final FaceShape loveFace = FaceShape(
   ),
   mouth: _smile(const Offset(100, 130), width: 26, depth: 9),
   props: const [PropShape(PropKind.heart, at: Offset(166, 26), scale: 1.7)],
+);
+
+// ---------------------------------------------------------------------------
+// The night shift: faces for the hours around a page. Shared helpers first.
+// ---------------------------------------------------------------------------
+
+/// A half open eye at [at]: the white squashed flat under a heavy lid, the
+/// pupil sunk to the bottom of it. Pair it with [_lidLine], which draws the
+/// lid itself.
+EyeShape _heavy(
+  Offset at, {
+  double ball = 18,
+  double squash = 0.55,
+  Offset look = const Offset(0, 3),
+}) => EyeShape(
+  centre: at,
+  ballRadius: ball,
+  ballSquash: squash,
+  pupilRadius: 9,
+  pupilOffset: look,
+  lidPoints: restingLid(at),
+);
+
+/// A brow laid along the top of a [_heavy] eye at [at], so it reads as the
+/// lid. [leftDrop] and [rightDrop] let either end sag.
+BrowShape _lidLine(
+  Offset at, {
+  double ball = 18,
+  double squash = 0.55,
+  double leftDrop = 0,
+  double rightDrop = 0,
+}) {
+  final top = -ball * squash;
+  return BrowShape([
+    at + Offset(-21, top + leftDrop),
+    at + Offset(0, top),
+    at + Offset(21, top + rightDrop),
+  ]);
+}
+
+/// Gritted teeth: a wide white mouth with square corners, [rx] by [ry]
+/// around [at]. Lay a [PropKind.teeth] over it for the gaps.
+MouthShape _grimace(Offset at, double rx, double ry) {
+  Offset on(double angle) {
+    final c = math.cos(angle);
+    final s = math.sin(angle);
+    return at +
+        Offset(
+          rx * c.sign * math.pow(c.abs(), 0.35),
+          ry * s.sign * math.pow(s.abs(), 0.35),
+        );
+  }
+
+  return MouthShape(
+    lipsMouth(
+      (t) => on(math.pi - math.pi * t),
+      (t) => on(math.pi + math.pi * t),
+    ),
+    width: 8,
+    fill: 1,
+    fillColor: CritColors.white,
+  );
+}
+
+/// A closed mouth from [from] to [to] with [waves] small wobbles [depth]
+/// deep along it.
+MouthShape _wobble(
+  Offset from,
+  Offset to, {
+  double waves = 1.5,
+  double depth = 3,
+  double bend = 0,
+}) => MouthShape(
+  sampleMouth(
+    (t) =>
+        Offset.lerp(from, to, t)! +
+        Offset(
+          0,
+          depth * math.sin(waves * 2 * math.pi * t) -
+              bend * math.sin(math.pi * t),
+        ),
+  ),
+);
+
+/// Brows pushed up in the middle, the way a face worries or pleads.
+const BrowShape _pleadLeft = BrowShape([
+  Offset(54, 70),
+  Offset(69, 65),
+  Offset(84, 58),
+]);
+
+/// The same brow over the right eye.
+const BrowShape _pleadRight = BrowShape([
+  Offset(116, 58),
+  Offset(131, 65),
+  Offset(146, 70),
+]);
+
+// ---------------------------------------------------------------------------
+
+/// The alarm just pulled it out of sleep. One eye prised half open, the
+/// other still shut, mouth hanging open, head lolling, and
+/// the last of the Zzz still hanging about.
+final FaceShape groggyFace = FaceShape(
+  leftEye: _heavy(const Offset(72, 98), squash: 0.45, look: const Offset(2, 3)),
+  rightEye: _sagging(const Offset(130, 98), depth: 4),
+  leftBrow: _lidLine(const Offset(72, 98), squash: 0.45, leftDrop: 2),
+  mouth: _openO(const Offset(104, 140), 6, 5),
+  props: const [PropShape(PropKind.zzz, at: Offset(150, 36), scale: 0.75)],
+  tilt: 0.08,
+);
+
+/// Not impressed. Both eyes half shut under flat lids, mouth a straight
+/// line. It is DNS again.
+final FaceShape deadpanFace = FaceShape(
+  leftEye: _heavy(const Offset(72, 96)),
+  rightEye: _heavy(const Offset(128, 96)),
+  leftBrow: _lidLine(const Offset(72, 96)),
+  rightBrow: _lidLine(const Offset(128, 96)),
+  mouth: MouthShape(lineMouth(const Offset(84, 138), const Offset(116, 138))),
+);
+
+/// Someone answered and it is over. Eyes shut, brows let go, a smile, a
+/// long breath out and a drop of sweat left on the brow.
+final FaceShape relievedFace = FaceShape(
+  leftEye: _sagging(const Offset(70, 96), depth: 5),
+  rightEye: _sagging(const Offset(130, 96), depth: 5),
+  leftBrow: _raised(70, height: 5),
+  rightBrow: _raised(130, height: 5),
+  mouth: _smile(const Offset(100, 134), width: 20, depth: 6),
+  props: const [
+    PropShape(PropKind.sweat, at: Offset(38, 72), scale: 1.1),
+    PropShape(PropKind.puff, at: Offset(160, 148)),
+  ],
+);
+
+/// Something is about to go wrong. Brows up, wide eyes with small pupils,
+/// teeth clenched and a bead of sweat.
+final FaceShape nervousFace = FaceShape(
+  leftEye: const EyeShape(
+    centre: Offset(72, 94),
+    ballRadius: 19,
+    pupilRadius: 7.5,
+    lidPoints: [Offset(59, 94), Offset(72, 90), Offset(85, 94)],
+  ),
+  rightEye: const EyeShape(
+    centre: Offset(128, 94),
+    ballRadius: 19,
+    pupilRadius: 7.5,
+    lidPoints: [Offset(115, 94), Offset(128, 90), Offset(141, 94)],
+  ),
+  leftBrow: _pleadLeft,
+  rightBrow: _pleadRight,
+  mouth: _grimace(const Offset(100, 143), 28, 11),
+  props: const [
+    PropShape(PropKind.teeth, at: Offset(100, 143)),
+    PropShape(PropKind.sweat, at: Offset(162, 64)),
+  ],
+);
+
+/// It is all too much. Big wet eyes, brows pushed up, a wobbling frown and
+/// a tear running from each eye.
+final FaceShape cryingFace = FaceShape(
+  leftEye: const EyeShape(
+    centre: Offset(70, 92),
+    ballRadius: 18,
+    pupilRadius: 12,
+    pupilOffset: Offset(0, 2),
+    shineRadius: 5,
+    shineOffset: Offset(-4, -5),
+    lidPoints: [Offset(57, 92), Offset(70, 88), Offset(83, 92)],
+  ),
+  rightEye: const EyeShape(
+    centre: Offset(130, 92),
+    ballRadius: 18,
+    pupilRadius: 12,
+    pupilOffset: Offset(0, 2),
+    shineRadius: 5,
+    shineOffset: Offset(-4, -5),
+    lidPoints: [Offset(117, 92), Offset(130, 88), Offset(143, 92)],
+  ),
+  leftBrow: _pleadLeft,
+  rightBrow: _pleadRight,
+  mouth: _wobble(
+    const Offset(84, 150),
+    const Offset(116, 150),
+    waves: 2,
+    depth: 2,
+    bend: 9,
+  ),
+  props: const [PropShape(PropKind.tears, at: Offset(100, 128))],
+);
+
+/// Fed up. Brows slammed into a V over hard dot eyes, teeth gritted.
+final FaceShape angryFace = FaceShape(
+  leftEye: EyeShape(
+    centre: const Offset(72, 100),
+    pupilRadius: 10,
+    lidPoints: restingLid(const Offset(72, 100)),
+  ),
+  rightEye: EyeShape(
+    centre: const Offset(128, 100),
+    pupilRadius: 10,
+    lidPoints: restingLid(const Offset(128, 100)),
+  ),
+  leftBrow: const BrowShape([
+    Offset(50, 68),
+    Offset(69, 77),
+    Offset(88, 86),
+  ], width: 11),
+  rightBrow: const BrowShape([
+    Offset(112, 86),
+    Offset(131, 77),
+    Offset(150, 68),
+  ], width: 11),
+  mouth: _grimace(const Offset(100, 145), 26, 11),
+  head: const HeadShape(strokeWidth: 12),
+  props: const [PropShape(PropKind.teeth, at: Offset(100, 145))],
+);
+
+/// Caught out. Cheeks gone pink, eyes looking anywhere else, a mouth that
+/// cannot settle.
+final FaceShape embarrassedFace = FaceShape(
+  leftEye: _open(const Offset(74, 92), look: const Offset(-7, 4), ball: 18),
+  rightEye: _open(const Offset(126, 92), look: const Offset(-7, 4), ball: 18),
+  leftBrow: _pleadLeft,
+  rightBrow: _pleadRight,
+  mouth: _wobble(const Offset(86, 138), const Offset(114, 138)),
+  props: const [PropShape(PropKind.blush, at: Offset(100, 122))],
+);
+
+/// Dazzled. Stars for eyes, brows up and a wide open grin.
+final FaceShape starstruckFace = FaceShape(
+  leftEye: EyeShape(
+    centre: const Offset(70, 92),
+    pupilRadius: 0,
+    lidPoints: restingLid(const Offset(70, 92)),
+  ),
+  rightEye: EyeShape(
+    centre: const Offset(130, 92),
+    pupilRadius: 0,
+    lidPoints: restingLid(const Offset(130, 92)),
+  ),
+  leftBrow: _raised(70, height: 12),
+  rightBrow: _raised(130, height: 12),
+  mouth: MouthShape(
+    wedgeMouth(
+      const Offset(78, 126),
+      const Offset(100, 152),
+      const Offset(122, 126),
+    ),
+    fill: 1,
+    fillsWithInk: true,
+  ),
+  props: const [PropShape(PropKind.starEyes, at: Offset(100, 92))],
+);
+
+/// Nothing to see here. Eyes up and away, brows up, lips pursed on a
+/// whistle and a note coming off them.
+final FaceShape whistlingFace = FaceShape(
+  leftEye: _open(_openLeft, look: const Offset(6, -7), ball: 18),
+  rightEye: _open(_openRight, look: const Offset(6, -7), ball: 18),
+  leftBrow: _raised(70),
+  rightBrow: _raised(130, height: 13),
+  mouth: _darkO(const Offset(112, 140), 5, 5),
+  props: const [PropShape(PropKind.note, at: Offset(156, 118), scale: 1.5)],
+  tilt: -0.05,
+);
+
+/// Third page of the night. Lids hanging, bags under both eyes, a mouth
+/// with nothing left in it, and the head sagging.
+final FaceShape exhaustedFace = FaceShape(
+  leftEye: _heavy(const Offset(72, 98), squash: 0.4, look: const Offset(0, 4)),
+  rightEye: _heavy(
+    const Offset(128, 98),
+    squash: 0.4,
+    look: const Offset(0, 4),
+  ),
+  leftBrow: _lidLine(const Offset(72, 98), squash: 0.4, leftDrop: 8),
+  rightBrow: _lidLine(const Offset(128, 98), squash: 0.4, rightDrop: 8),
+  mouth: _wobble(
+    const Offset(82, 146),
+    const Offset(118, 146),
+    depth: 2.5,
+    bend: 6,
+  ),
+  head: const HeadShape(squashX: 1.02, squashY: 0.97),
+  props: const [PropShape(PropKind.eyeBags, at: Offset(100, 116), scale: 1.15)],
+  tilt: 0.1,
 );

@@ -344,7 +344,163 @@ void _prop(List<FaceOp> ops, PropShape prop, FaceStyle style) {
           ops.add(DrawOp(arc.build(), OpPaint.stroke(ink, 5 * prop.scale)));
         }
       }
+
+    case PropKind.sweat:
+      _droplet(ops, prop.at, prop.scale, CritColors.sweatBlue, alpha, ink);
+
+    case PropKind.tears:
+      // One under each eye. The gap stays the same at any scale, so the
+      // tears stay under the eyes as they grow in.
+      for (final side in const [-1.0, 1.0]) {
+        _droplet(
+          ops,
+          prop.at + Offset(side * 30, 0),
+          prop.scale,
+          CritColors.tearBlue,
+          alpha,
+          ink,
+        );
+      }
+
+    case PropKind.blush:
+      // A pink patch on each cheek with three short strokes across it, so
+      // it still reads as a blush when the face is small.
+      final s = prop.scale;
+      for (final side in const [-1.0, 1.0]) {
+        final c = prop.at + Offset(side * 48, 0);
+        ops.add(
+          DrawOp(
+            OvalShape(c.dx, c.dy, 15 * s, 8 * s),
+            OpPaint.fill(_alpha(CritColors.blushPink, alpha)),
+          ),
+        );
+        final strokes = OpPathBuilder();
+        for (final dx in const [-7.0, 0.0, 7.0]) {
+          strokes
+            ..moveTo(c + Offset((dx - 2.5) * s, 4 * s))
+            ..lineTo(c + Offset((dx + 2.5) * s, -4 * s));
+        }
+        ops.add(
+          DrawOp(
+            strokes.build(),
+            OpPaint.stroke(_alpha(style.inkColor, alpha * 0.6), 3 * s),
+          ),
+        );
+      }
+
+    case PropKind.teeth:
+      // A line where the teeth meet and two gaps between them. The mouth
+      // under it is the white, so the lines are drawn the way a pupil on
+      // white is: dark even when the ink is light.
+      final s = prop.scale;
+      final a = prop.at;
+      final teeth = OpPathBuilder()
+        ..moveTo(a + Offset(-21 * s, 0))
+        ..lineTo(a + Offset(21 * s, 0));
+      for (final dx in const [-9.0, 9.0]) {
+        teeth
+          ..moveTo(a + Offset(dx * s, -9 * s))
+          ..lineTo(a + Offset(dx * s, 9 * s));
+      }
+      ops.add(
+        DrawOp(
+          teeth.build(),
+          OpPaint.stroke(_alpha(pupilOnWhite(style.inkColor), alpha), 4.5 * s),
+        ),
+      );
+
+    case PropKind.starEyes:
+      // Five point stars where the eyes would be, in the ink, with round
+      // points from the pen.
+      final s = prop.scale;
+      for (final side in const [-1.0, 1.0]) {
+        final c = prop.at + Offset(side * 30, 0);
+        final star = OpPathBuilder();
+        for (var i = 0; i < 10; i++) {
+          final r = (i.isEven ? 17.0 : 7.5) * s;
+          final angle = -math.pi / 2 + i * math.pi / 5;
+          final p = c + Offset(r * math.cos(angle), r * math.sin(angle));
+          if (i == 0) {
+            star.moveTo(p);
+          } else {
+            star.lineTo(p);
+          }
+        }
+        star.close();
+        final shape = star.build();
+        ops
+          ..add(DrawOp(shape, OpPaint.fill(ink)))
+          ..add(DrawOp(shape, OpPaint.stroke(ink, 4 * s)));
+      }
+
+    case PropKind.note:
+      // A single note: a round head, a stem and a flag.
+      final s = prop.scale;
+      final a = prop.at;
+      ops.add(
+        DrawOp(
+          OvalShape(a.dx - 5 * s, a.dy + 10 * s, 7 * s, 5.5 * s),
+          OpPaint.fill(ink),
+        ),
+      );
+      final stem = OpPathBuilder()
+        ..moveTo(a + Offset(1.5 * s, 10 * s))
+        ..lineTo(a + Offset(1.5 * s, -14 * s))
+        ..quadTo(a + Offset(12 * s, -11 * s), a + Offset(11 * s, -1 * s));
+      ops.add(DrawOp(stem.build(), OpPaint.stroke(ink, 4.5 * s)));
+
+    case PropKind.eyeBags:
+      // A soft line under each eye, a little lighter than the ink.
+      final s = prop.scale;
+      for (final side in const [-1.0, 1.0]) {
+        final c = prop.at + Offset(side * 30, 0);
+        final bag = OpPathBuilder()
+          ..moveTo(c + Offset(-12 * s, -2 * s))
+          ..quadTo(c + Offset(0, 8 * s), c + Offset(12 * s, -2 * s));
+        ops.add(
+          DrawOp(
+            bag.build(),
+            OpPaint.stroke(_alpha(style.inkColor, alpha * 0.85), 5 * s),
+          ),
+        );
+      }
   }
+}
+
+/// A drop with its point up, its round end [scale] times 9 units across,
+/// centred on [at]: sweat or a tear.
+void _droplet(
+  List<FaceOp> ops,
+  Offset at,
+  double scale,
+  Color colour,
+  double alpha,
+  Color ink,
+) {
+  final r = 9 * scale;
+  final tip = at + Offset(0, -r * 1.9);
+  final drop =
+      (OpPathBuilder()
+            ..moveTo(tip)
+            ..quadTo(at + Offset(r * 1.05, -r * 0.4), at + Offset(r, r * 0.4))
+            ..arc(at + Offset(0, r * 0.4), r, 0, math.pi)
+            ..quadTo(at + Offset(-r * 1.05, -r * 0.4), tip)
+            ..close())
+          .build();
+  ops
+    ..add(DrawOp(drop, OpPaint.fill(_alpha(colour, alpha))))
+    ..add(DrawOp(drop, OpPaint.stroke(ink, 3 * scale)))
+    ..add(
+      DrawOp(
+        OvalShape(
+          at.dx - 2.5 * scale,
+          at.dy + 3 * scale,
+          2.2 * scale,
+          2.2 * scale,
+        ),
+        OpPaint.fill(_alpha(CritColors.white, alpha)),
+      ),
+    );
 }
 
 /// The circles a puff of breath is made of, as (offset from the prop's

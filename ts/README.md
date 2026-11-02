@@ -1,6 +1,6 @@
 # @anvilnine/critalarm-face
 
-Crit, the [Crit Alarm](https://critalarm.app) mascot, for the web and Node. 36 faces that blend
+Crit, the [Crit Alarm](https://critalarm.app) mascot, for the web and Node. 46 faces that blend
 into each other, an idle loop, and 18 ringing animations, drawn to SVG or a 2D canvas. No runtime
 dependencies. ESM only, Node 22 or later, and any current browser.
 

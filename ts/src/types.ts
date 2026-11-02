@@ -14,7 +14,7 @@ export type Point = readonly [number, number];
 /** A colour `[r, g, b, a]`, each 0 to 1, in sRGB. */
 export type Color = readonly [number, number, number, number];
 
-/** The 36 expressions Crit has. */
+/** The 46 expressions Crit has. */
 export type FaceState =
   | "calm"
   | "watching"
@@ -51,7 +51,17 @@ export type FaceState =
   | "proud"
   | "cheeky"
   | "confident"
-  | "love";
+  | "love"
+  | "groggy"
+  | "deadpan"
+  | "relieved"
+  | "nervous"
+  | "crying"
+  | "angry"
+  | "embarrassed"
+  | "starstruck"
+  | "whistling"
+  | "exhausted";
 
 /** The 18 ways a ringing face can ring. */
 export type RingingStyleName =
@@ -75,7 +85,19 @@ export type RingingStyleName =
   | "spinOut";
 
 /** Extras drawn around a resting face. */
-export type PropKind = "popLines" | "zzz" | "puff" | "heart" | "motionArcs";
+export type PropKind =
+  | "popLines"
+  | "zzz"
+  | "puff"
+  | "heart"
+  | "motionArcs"
+  | "sweat"
+  | "tears"
+  | "blush"
+  | "teeth"
+  | "starEyes"
+  | "note"
+  | "eyeBags";
 
 /** Extras drawn around a ringing face. */
 export type RingFxKind =

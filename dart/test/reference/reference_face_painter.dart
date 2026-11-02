@@ -368,7 +368,164 @@ class ReferenceFacePainter extends CustomPainter {
             );
           }
         }
+
+      // The props below came after the split into draw ops, so the app's
+      // painter never had them. They are drawn here with plain canvas calls,
+      // apart from the op builder, so the replay still has a second drawing
+      // to match.
+      case PropKind.sweat:
+        _drop(canvas, prop.at, prop.scale, const Color(0xFF8FD3F7), alpha, ink);
+
+      case PropKind.tears:
+        for (final side in const [-1.0, 1.0]) {
+          _drop(
+            canvas,
+            prop.at + Offset(side * 30, 0),
+            prop.scale,
+            const Color(0xFF4FA8E8),
+            alpha,
+            ink,
+          );
+        }
+
+      case PropKind.blush:
+        for (final side in const [-1.0, 1.0]) {
+          canvas.drawOval(
+            Rect.fromCenter(
+              center: prop.at + Offset(side * 48, 0),
+              width: 30 * prop.scale,
+              height: 16 * prop.scale,
+            ),
+            Paint()..color = const Color(0xFFFF8FA3).withValues(alpha: alpha),
+          );
+          final c = prop.at + Offset(side * 48, 0);
+          for (final dx in const [-7.0, 0.0, 7.0]) {
+            canvas.drawLine(
+              c + Offset((dx - 2.5) * prop.scale, 4 * prop.scale),
+              c + Offset((dx + 2.5) * prop.scale, -4 * prop.scale),
+              _pen(_ink(alpha * 0.6), 3 * prop.scale),
+            );
+          }
+        }
+
+      case PropKind.teeth:
+        final s = prop.scale;
+        final onWhite = inkColor.computeLuminance() > 0.5 ? _darkInk : inkColor;
+        final pen = _pen(onWhite.withValues(alpha: onWhite.a * alpha), 4.5 * s);
+        canvas.drawLine(
+          prop.at + Offset(-21 * s, 0),
+          prop.at + Offset(21 * s, 0),
+          pen,
+        );
+        for (final dx in const [-9.0, 9.0]) {
+          canvas.drawLine(
+            prop.at + Offset(dx * s, -9 * s),
+            prop.at + Offset(dx * s, 9 * s),
+            pen,
+          );
+        }
+
+      case PropKind.starEyes:
+        final s = prop.scale;
+        for (final side in const [-1.0, 1.0]) {
+          final c = prop.at + Offset(side * 30, 0);
+          final star = Path();
+          for (var i = 0; i < 10; i++) {
+            final r = (i.isEven ? 17.0 : 7.5) * s;
+            final a = -math.pi / 2 + i * math.pi / 5;
+            final x = c.dx + r * math.cos(a);
+            final y = c.dy + r * math.sin(a);
+            i == 0 ? star.moveTo(x, y) : star.lineTo(x, y);
+          }
+          star.close();
+          canvas
+            ..drawPath(star, Paint()..color = ink)
+            ..drawPath(star, _pen(ink, 4 * s));
+        }
+
+      case PropKind.note:
+        final s = prop.scale;
+        final a = prop.at;
+        canvas
+          ..drawOval(
+            Rect.fromCenter(
+              center: a + Offset(-5 * s, 10 * s),
+              width: 14 * s,
+              height: 11 * s,
+            ),
+            Paint()..color = ink,
+          )
+          ..drawPath(
+            Path()
+              ..moveTo(a.dx + 1.5 * s, a.dy + 10 * s)
+              ..lineTo(a.dx + 1.5 * s, a.dy - 14 * s)
+              ..quadraticBezierTo(
+                a.dx + 12 * s,
+                a.dy - 11 * s,
+                a.dx + 11 * s,
+                a.dy - 1 * s,
+              ),
+            _pen(ink, 4.5 * s),
+          );
+
+      case PropKind.eyeBags:
+        final s = prop.scale;
+        final pen = _pen(_ink(alpha * 0.85), 5 * s);
+        for (final side in const [-1.0, 1.0]) {
+          final c = prop.at + Offset(side * 30, 0);
+          canvas.drawPath(
+            Path()
+              ..moveTo(c.dx - 12 * s, c.dy - 2 * s)
+              ..quadraticBezierTo(
+                c.dx,
+                c.dy + 8 * s,
+                c.dx + 12 * s,
+                c.dy - 2 * s,
+              ),
+            pen,
+          );
+        }
     }
+  }
+
+  void _drop(
+    Canvas canvas,
+    Offset at,
+    double scale,
+    Color colour,
+    double alpha,
+    Color ink,
+  ) {
+    final r = 9 * scale;
+    final drop = Path()
+      ..moveTo(at.dx, at.dy - r * 1.9)
+      ..quadraticBezierTo(
+        at.dx + r * 1.05,
+        at.dy - r * 0.4,
+        at.dx + r,
+        at.dy + r * 0.4,
+      )
+      ..arcTo(
+        Rect.fromCircle(center: at + Offset(0, r * 0.4), radius: r),
+        0,
+        math.pi,
+        false,
+      )
+      ..quadraticBezierTo(
+        at.dx - r * 1.05,
+        at.dy - r * 0.4,
+        at.dx,
+        at.dy - r * 1.9,
+      )
+      ..close();
+    canvas
+      ..drawPath(drop, Paint()..color = colour.withValues(alpha: alpha))
+      ..drawPath(drop, _pen(ink, 3 * scale))
+      ..drawCircle(
+        at + Offset(-2.5 * scale, 3 * scale),
+        2.2 * scale,
+        Paint()..color = _white.withValues(alpha: alpha),
+      );
   }
 
   @override
