@@ -84,7 +84,7 @@ export function headShape(fields: Writable<HeadShape> = {}): HeadShape {
 }
 
 /** The invisible brow a face without one rests with, on the left. */
-export const restingLeftBrow: BrowShape = browShape(
+const restingLeftBrow: BrowShape = browShape(
   [
     [56, 70],
     [71, 70],
@@ -94,7 +94,7 @@ export const restingLeftBrow: BrowShape = browShape(
 );
 
 /** The same, on the right. */
-export const restingRightBrow: BrowShape = browShape(
+const restingRightBrow: BrowShape = browShape(
   [
     [114, 70],
     [129, 70],
@@ -220,7 +220,7 @@ export function resolvedLidPoints(eye: EyeShape): readonly Point[] {
 // ---------------------------------------------------------------------------
 
 /** Every part of the eye moved `t` of the way from `a` to `b`. */
-export function lerpEye(a: EyeShape, b: EyeShape, t: number): EyeShape {
+function lerpEye(a: EyeShape, b: EyeShape, t: number): EyeShape {
   return {
     centre: lerpPoint(a.centre, b.centre, t),
     ballRadius: lerpNumber(eyeBall(a), eyeBall(b), t),
@@ -259,7 +259,7 @@ export function lerpMouth(a: MouthShape, b: MouthShape, t: number): MouthShape {
 }
 
 /** A head moved `t` of the way from `a` to `b`. */
-export function lerpHead(a: HeadShape, b: HeadShape, t: number): HeadShape {
+function lerpHead(a: HeadShape, b: HeadShape, t: number): HeadShape {
   return {
     squashX: lerpNumber(a.squashX, b.squashX, t),
     squashY: lerpNumber(a.squashY, b.squashY, t),
