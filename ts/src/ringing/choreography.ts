@@ -1,6 +1,7 @@
 /**
  * Where each ringing face is at moment `t` of its loop. A line by line port
- * of `dart/lib/src/ringing/ringing_choreography.dart`.
+ * of `dart/lib/src/ringing/ringing_choreography.dart` and the files in
+ * `dart/lib/src/ringing/choreography/`.
  *
  * `t` runs 0 to 1 over one loop and wraps. The same style and `t` always
  * give the same frame.
