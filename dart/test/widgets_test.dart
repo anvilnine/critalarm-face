@@ -248,6 +248,18 @@ void main() {
         sawBeat = face.shape != null;
       }
       expect(sawBeat, isTrue, reason: 'a beat should start within a minute');
+
+      var settled = false;
+      for (var i = 0; i < 600 && !settled; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+        final face = tester.widget<FaceWidget>(find.byType(FaceWidget));
+        settled = face.shape == null;
+      }
+      expect(settled, isTrue, reason: 'the beat should end back on calm');
+      expect(
+        tester.widget<FaceWidget>(find.byType(FaceWidget)).state,
+        FaceState.calm,
+      );
       await _unmount(tester);
     });
 
