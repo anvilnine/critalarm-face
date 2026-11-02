@@ -19,7 +19,8 @@ export function cubicBezier(a: number, b: number, c: number, d: number): Easing 
   const at = (p: number, q: number, m: number) =>
     3 * p * (1 - m) * (1 - m) * m + 3 * q * (1 - m) * m * m + m * m * m;
   return (t: number) => {
-    if (t === 0 || t === 1) return t;
+    if (!(t > 0)) return 0;
+    if (t >= 1) return 1;
     let lo = 0;
     let hi = 1;
     for (;;) {

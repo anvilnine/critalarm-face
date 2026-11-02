@@ -70,18 +70,25 @@ function makeStage(element: HTMLElement, size: number, room: number, label: stri
   return { wrap, draw, remove: () => wrap.remove() };
 }
 
-/** Runs `frame` on every animation frame until stopped. */
+/**
+ * Runs `frame` on every animation frame until stopped. A `stop` called from
+ * inside `frame` holds: the next frame is not requested.
+ */
 function animate(frame: (nowMs: number) => void): { start(): void; stop(): void } {
   let id: number | null = null;
+  let running = false;
   const tick = (now: number) => {
+    id = null;
     frame(now);
-    id = requestAnimationFrame(tick);
+    if (running && id === null) id = requestAnimationFrame(tick);
   };
   return {
     start() {
+      running = true;
       if (id === null) id = requestAnimationFrame(tick);
     },
     stop() {
+      running = false;
       if (id !== null) cancelAnimationFrame(id);
       id = null;
     },
@@ -180,7 +187,7 @@ export function mountFace(element: HTMLElement, options: MountFaceOptions = {}):
   const size = options.size ?? 120;
   const palette = resolvePalette(options.palette);
   const live = options.live ?? true;
-  const morphMs = options.morphMs ?? 450;
+  const morphMs = Math.max(0, options.morphMs ?? 450);
   const query = reducedMotionQuery();
   const stage = makeStage(element, size, Math.round(size * PROP_ROOM), "Crit");
 
@@ -201,7 +208,7 @@ export function mountFace(element: HTMLElement, options: MountFaceOptions = {}):
   const render = (now: number) => {
     let ops: FaceOp[];
     if (from !== null && !reduced()) {
-      const p = clamp((now - morphStart) / morphMs, 0, 1);
+      const p = morphMs > 0 ? clamp((now - morphStart) / morphMs, 0, 1) : 1;
       const t = easeInOut(p);
       const to = lookOf(state);
       current = {
@@ -258,7 +265,9 @@ export function mountFace(element: HTMLElement, options: MountFaceOptions = {}):
       state = next;
       if (reduced()) from = null;
       render(performance.now());
-      if (!reduced()) loop.start();
+      // A blend that finished in that one render (morphMs 0) has already
+      // stopped the loop if the face is still. Do not start it again.
+      if (from !== null && !reduced()) loop.start();
     },
     destroy() {
       if (destroyed) return;

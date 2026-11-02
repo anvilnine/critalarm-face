@@ -135,6 +135,49 @@ const fake = (el: HTMLElement) => el as unknown as FakeElement;
 const drawn = () => JSON.stringify(calls);
 
 describe("mountFace", () => {
+  it("stops asking for frames once a blend ends on a still face", () => {
+    const face = mountFace(host(), { state: "calm", live: false, morphMs: 100 });
+    face.setState("shocked");
+    expect(frames.size).toBe(1);
+    clock += 50;
+    runFrames();
+    expect(frames.size).toBe(1);
+    clock += 50;
+    runFrames();
+    expect(frames.size).toBe(0);
+    calls = [];
+    runFrames();
+    expect(calls).toEqual([]);
+    face.destroy();
+  });
+
+  it("keeps exactly one frame waiting after a blend on a live face", () => {
+    const face = mountFace(host(), { state: "calm", morphMs: 100 });
+    face.setState("alarmed");
+    for (let i = 0; i < 5; i++) {
+      clock += 50;
+      runFrames();
+      expect(frames.size).toBe(1);
+    }
+    face.destroy();
+    expect(frames.size).toBe(0);
+  });
+
+  it.each([0, -100, Number.NaN])("a morphMs of %s switches at once without hanging", (morphMs) => {
+    const face = mountFace(host(), { state: "calm", live: false, morphMs });
+    calls = [];
+    face.setState("shocked");
+    // The switch is drawn by setState itself, finished and finite.
+    expect(calls.length).toBeGreaterThan(0);
+    for (const call of calls) {
+      for (const arg of call.slice(1)) {
+        if (typeof arg === "number") expect(Number.isFinite(arg)).toBe(true);
+      }
+    }
+    expect(frames.size).toBe(0);
+    face.destroy();
+  });
+
   it("mounts a labelled canvas inside the host and starts animating", () => {
     const el = host();
     const face = mountFace(el, { state: "calm", size: 100 });
