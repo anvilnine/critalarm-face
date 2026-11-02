@@ -49,6 +49,15 @@ export const easeInOutCubic: Easing = cubicBezier(
 );
 
 /**
+ * A plain cubic ease in and out: `4x^3` for the first half, then the mirror
+ * of it. The ringing choreography uses it for its one-off moves. It is not
+ * exported from the package; `easeInOutCubic` is the curve for blends.
+ */
+export function easeInOutPoly(x: number): number {
+  return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+}
+
+/**
  * How far the watching face's pupils have drifted at point `t` (0 to 1) of
  * its look-around loop, in box units: 0 until 0.4, easing to -18 by 0.5,
  * held, and easing back from 0.9 to 1.

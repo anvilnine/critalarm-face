@@ -9,6 +9,7 @@
  */
 
 import { faceFor } from "../data.js";
+import { easeInOutPoly } from "../easing.js";
 import { add, clamp, frac, lerpPoints, mul, TAU } from "../math.js";
 import {
   browShape,
@@ -100,10 +101,6 @@ function pulse(t: number, cycles: number, phase = 0): number {
 
 function seg(t: number, a: number, b: number): number {
   return clamp((t - a) / (b - a), 0, 1);
-}
-
-function ease(x: number): number {
-  return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
 }
 
 function elastic(x: number): number {
@@ -632,7 +629,7 @@ function bellHead(t: number): RingingFrame {
 }
 
 function eyesPop(t: number): RingingFrame {
-  const pop = elastic(seg(t, 0.06, 0.4)) * (1 - ease(seg(t, 0.72, 0.94)));
+  const pop = elastic(seg(t, 0.06, 0.4)) * (1 - easeInOutPoly(seg(t, 0.72, 0.94)));
   const brace = bump(seg(t, 0, 0.06));
   const [lb, rb] = brows([52, 70], [68, 64], [84, 68], {
     by: [0, -28 * pop + 4 * brace],
@@ -671,7 +668,7 @@ function eyesPop(t: number): RingingFrame {
 
 function annoyed(t: number): RingingFrame {
   const env = bump(seg(t, 0.08, 0.62));
-  const a = Math.PI + Math.PI * ease(seg(t, 0.12, 0.56));
+  const a = Math.PI + Math.PI * easeInOutPoly(seg(t, 0.12, 0.56));
   const look = mul([Math.cos(a), Math.sin(a)], 9 * env);
   const sigh = bump(seg(t, 0.6, 0.94));
   const [lb, rb] = brows([52, 82], [70, 81], [88, 83], { width: 12 });
@@ -699,7 +696,7 @@ function annoyed(t: number): RingingFrame {
 }
 
 function startled(t: number): RingingFrame {
-  const awake = ease(seg(t, 0.4, 0.45)) * (1 - ease(seg(t, 0.8, 0.98)));
+  const awake = easeInOutPoly(seg(t, 0.4, 0.45)) * (1 - easeInOutPoly(seg(t, 0.8, 0.98)));
   const air = seg(t, 0.42, 0.72);
   const height = 4 * air * (1 - air);
   const land = bump(seg(t, 0.72, 0.8));
@@ -954,7 +951,7 @@ function siren(t: number): RingingFrame {
 }
 
 function meltdown(t: number): RingingFrame {
-  const down = ease(seg(t, 0.05, 0.6));
+  const down = easeInOutPoly(seg(t, 0.05, 0.6));
   const back = elastic(seg(t, 0.76, 1));
   const m = down * (1 - back);
   const squashY = 1 - 0.3 * m;
@@ -1001,7 +998,7 @@ function meltdown(t: number): RingingFrame {
 }
 
 function spinOut(t: number): RingingFrame {
-  const spinP = ease(seg(t, 0, 0.45));
+  const spinP = easeInOutPoly(seg(t, 0, 0.45));
   const w = seg(t, 0.45, 1);
   const wobble = Math.sin(TAU * 3 * w) * (1 - w);
   const swirl = seg(t, 0, 0.1) * (1 - seg(t, 0.72, 0.95));
