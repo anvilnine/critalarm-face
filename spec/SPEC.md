@@ -358,8 +358,12 @@ normal speed) and `stillT` (the point shown when motion is off).
 
 ### Choreography
 
-The frame for each style is a plain function of `t`, in
-`dart/lib/src/ringing/ringing_choreography.dart`. Port it line by line. The
+The frame for each style is a plain function of `t`. `ringingFrameFor` is in
+`dart/lib/src/ringing/ringing_choreography.dart`, and each style, plus the
+timing and part helpers they share, has its own file in
+`dart/lib/src/ringing/choreography/` (`classic.dart`, `panic.dart`, `timing.dart`,
+`parts.dart` and so on). Port them line by line. The TypeScript package keeps
+the same file names. The
 timing helpers it uses:
 
 ```
