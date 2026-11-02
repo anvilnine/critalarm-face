@@ -16,7 +16,7 @@ export 'src/face_state.dart';
 export 'src/face_widget.dart';
 export 'src/idle_face.dart';
 export 'src/idle_face_controller.dart';
-export 'src/motion.dart';
+export 'src/motion.dart' show CritMotion;
 export 'src/ops/build_face_ops.dart';
 export 'src/ops/build_ringing_ops.dart';
 export 'src/ops/face_op.dart';
