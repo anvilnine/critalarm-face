@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "description": "Crit, the Crit Alarm mascot, for the web and Node. 46 faces that blend into each other, an idle loop and 18 ringing animations, drawn to SVG or canvas.",
   "license": "Apache-2.0",
-  "author": "Anvil Nine",
+  "author": {
+    "name": "Anvil Nine",
+    "url": "https://anvilnine.com"
+  },
   "homepage": "https://critalarm.app",
   "repository": {
     "type": "git",
