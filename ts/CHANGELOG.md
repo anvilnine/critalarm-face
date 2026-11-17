@@ -4,6 +4,7 @@
 - Seven new prop kinds to draw them: `sweat`, `tears`, `blush`, `teeth`, `starEyes`, `note` and `eyeBags`.
 - Fixed `mountFace` with `live: false`: the animation loop kept running after a blend ended. A `stop` called from inside a frame now holds.
 - Fixed `mountFace` with `morphMs: 0` hanging the page. A `morphMs` of 0 or below now switches state at once. `cubicBezier` also returns 0 for any input that is not above 0, such as NaN.
+- `toSvg` escapes `idPrefix` the way it escapes `title` and `background`. A prefix with a quote or `<` in it could end the clip path id and add markup to the SVG.
 
 ## 0.1.0
 

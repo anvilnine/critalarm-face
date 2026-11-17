@@ -154,7 +154,8 @@ export function svgBody(ops: readonly FaceOp[], idPrefix = "crit"): { body: stri
         openGroup(`transform="scale(${n(op.sx)} ${n(op.sy)})"`);
         break;
       case "clipOval": {
-        const id = `${idPrefix}-clip-${clipCount++}`;
+        // The prefix comes from the caller, so it is escaped like the title.
+        const id = escapeXml(`${idPrefix}-clip-${clipCount++}`);
         defs.push(
           `<clipPath id="${id}"><ellipse cx="${n(op.cx)}" cy="${n(op.cy)}" rx="${n(op.rx)}" ry="${n(op.ry)}"/></clipPath>`,
         );

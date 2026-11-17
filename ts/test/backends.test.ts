@@ -93,6 +93,14 @@ describe("toSvg", () => {
     );
   });
 
+  it("escapes a clip id prefix like the title", () => {
+    const svg = renderFaceSvg("watching", { idPrefix: 'x"/><script>alert(1)</script><g a="' });
+    expect(svg).toContain("clip-path=");
+    expect(svg).not.toContain("<script");
+    expect(svg).not.toContain('x"/>');
+    expect(balanced(svg)).toBe(true);
+  });
+
   it("draws the head, the eyes and a white eye where they belong", () => {
     const calm = png(renderFaceSvg("calm", { size: 200 }));
     expect(pixel(calm, 100, 60)).toBe(toHex(palettes.light.fill));
